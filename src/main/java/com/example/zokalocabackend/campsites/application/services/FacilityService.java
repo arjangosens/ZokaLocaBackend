@@ -2,6 +2,7 @@ package com.example.zokalocabackend.campsites.application.services;
 
 import com.example.zokalocabackend.campsites.domain.Facility;
 import com.example.zokalocabackend.campsites.persistence.FacilityRepository;
+import com.example.zokalocabackend.exceptions.DuplicateResourceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,8 +26,8 @@ public class FacilityService {
     }
 
     public void createFacility(String name) {
-        if (facilityRepository.existsByName(name)) {
-            throw new RuntimeException("Facility already exists");
+        if (facilityRepository.existsByNameIgnoreCase(name)) {
+            throw new DuplicateResourceException("Facility already exists");
         }
 
         facilityRepository.save(new Facility(name));

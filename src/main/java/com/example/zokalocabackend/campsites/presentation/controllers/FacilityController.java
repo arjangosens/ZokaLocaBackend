@@ -44,31 +44,23 @@ public class FacilityController {
 
     @PostMapping
     public ResponseEntity<?> createFacility(@RequestBody CreateFacilityRequest request) {
-        ResponseEntity<?> response;
         String name = request.name();
-
         if (name == null || name.isEmpty()) {
-            response = ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Facility name cannot be empty");
-        } else {
-            facilityService.createFacility(name);
-            response = ResponseEntity.ok().build();
+            throw new IllegalArgumentException("Facility name cannot be empty");
         }
 
-        return response;
+        facilityService.createFacility(name);
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateFacility(@PathVariable String id, @RequestBody UpdateFacilityRequest request) {
-        ResponseEntity<?> response;
         String name = request.name();
-
         if (name == null || name.isEmpty()) {
-            response = ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Facility name cannot be empty");
-        } else {
-            facilityService.updateFacility(id, name);
-            response = ResponseEntity.ok().build();
+            throw new IllegalArgumentException("Facility name cannot be empty");
         }
 
-        return response;
+        facilityService.updateFacility(id, name);
+        return ResponseEntity.ok().build();
     }
 }
