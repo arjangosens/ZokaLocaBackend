@@ -1,16 +1,15 @@
 package com.example.zokalocabackend.campsites.presentation.controllers;
 
+import com.example.zokalocabackend.campsites.application.mappers.FacilityMapper;
 import com.example.zokalocabackend.campsites.application.services.FacilityService;
 import com.example.zokalocabackend.campsites.domain.Facility;
 import com.example.zokalocabackend.campsites.presentation.requests.CreateFacilityRequest;
 import com.example.zokalocabackend.campsites.presentation.requests.UpdateFacilityRequest;
 import com.example.zokalocabackend.campsites.presentation.responses.GetFacilityResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -26,20 +25,13 @@ public class FacilityController {
     @GetMapping
     public ResponseEntity<List<GetFacilityResponse>> getAllFacilities() {
         List<Facility> facilities = facilityService.getAllFacilities();
-        List<GetFacilityResponse> facilityResponses = new ArrayList<>();
-
-        for (Facility facility : facilities) {
-            facilityResponses.add(new GetFacilityResponse(facility.getId(), facility.getName()));
-        }
-
-        return ResponseEntity.ok(facilityResponses);
+        return ResponseEntity.ok(FacilityMapper.toGetFacilityResponsesList(facilities));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<GetFacilityResponse> getFacility(@PathVariable String id) {
         Facility facility = facilityService.getFacilityById(id);
-        GetFacilityResponse response = new GetFacilityResponse(facility.getId(), facility.getName());
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(FacilityMapper.toGetFacilityResponse(facility));
     }
 
     @PostMapping
