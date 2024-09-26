@@ -1,4 +1,4 @@
-package com.example.zokalocabackend.campsites.application.mappers;
+package com.example.zokalocabackend.campsites.presentation.mappers;
 
 import com.example.zokalocabackend.campsites.domain.Facility;
 import com.example.zokalocabackend.campsites.presentation.responses.GetFacilityResponse;

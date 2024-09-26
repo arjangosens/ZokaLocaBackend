@@ -12,12 +12,13 @@ public class Campsite {
     private Address address;
     private PersonLimit personLimit;
     private CampsitePrice price;
-    private CampGround campGround;
     private LocalTime arrivalTime;
     private LocalTime departureTime;
     private int numOfToilets;
     private int numOfShowers;
     private int numOfWaterSources;
     private HashMap<String, SurroundingProximity> surroundings;
-    private Set<Facility> facilities;
+
+    private Set<String> facilityIds;
+    private String campGroundId;
 }

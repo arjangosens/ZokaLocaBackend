@@ -1,4 +1,5 @@
 package com.example.zokalocabackend.campsites.presentation.requests;
 
-public record CreateFacilityRequest(String name) { }
+public record ModifyCampgroundRequest(String name) {
 
+}
