@@ -36,6 +36,12 @@ public class CampgroundService {
     public void updateCampground(String id, String name) {
         Campground campground = campgroundRepository.findById(id).orElseThrow();
         campground.setName(name);
+        Campground existingCampground = campgroundRepository.findByNameIgnoreCase(name);
+        
+        if (existingCampground != null && !existingCampground.getId().equals(id)) {
+            throw new DuplicateResourceException("Another campground already has the same name");
+        }
+
         campgroundRepository.save(campground);
     }
 }

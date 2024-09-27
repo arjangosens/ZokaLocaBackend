@@ -1,7 +1,15 @@
 package com.example.zokalocabackend.campsites.domain;
 
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.data.annotation.Id;
+
+@Getter
 public class Campground {
+    @Id
     private String id;
+
+    @Setter
     private String name;
 
     public Campground() {}
@@ -15,15 +23,4 @@ public class Campground {
         this.name = name;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 }

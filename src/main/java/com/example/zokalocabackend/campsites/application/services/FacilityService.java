@@ -36,6 +36,13 @@ public class FacilityService {
     public void updateFacility(String id, String name) {
         Facility facility = facilityRepository.findById(id).orElseThrow();
         facility.setName(name);
+
+        Facility existingFacility = facilityRepository.findByNameIgnoreCase(name);
+
+        if (existingFacility != null && !existingFacility.getId().equals(id)) {
+            throw new DuplicateResourceException("Another facility already has the same name");
+        }
+
         facilityRepository.save(facility);
     }
 }

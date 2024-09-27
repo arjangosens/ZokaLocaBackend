@@ -1,8 +1,21 @@
 package com.example.zokalocabackend.campsites.domain;
 
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.Setter;
+
+import java.util.Locale;
+
+@Setter
+@Getter
 public class Address {
+
+    @NonNull
     private String country;
+
+    @NonNull
     private String city;
+
     private String street;
     private String houseNumber;
     private String zipcode;
@@ -11,6 +24,10 @@ public class Address {
     private int distanceInKm;
 
     public Address(String country, String city, String street, String houseNumber, String zipcode, String latitude, String longitude, int distanceInKm) {
+        if (!isValidCountryCode(country)) {
+            throw new IllegalArgumentException("Invalid country code");
+        }
+
         this.country = country;
         this.city = city;
         this.street = street;
@@ -21,67 +38,23 @@ public class Address {
         this.distanceInKm = distanceInKm;
     }
 
-    public String getCountry() {
-        return country;
-    }
+    public void setCountry(@NonNull String country) {
+        if (!isValidCountryCode(country)) {
+            throw new IllegalArgumentException("Invalid country code");
+        }
 
-    public void setCountry(String country) {
         this.country = country;
     }
 
-    public String getCity() {
-        return city;
-    }
+    private boolean isValidCountryCode(String countryCode) {
+        String[] countryCodes = Locale.getISOCountries();
 
-    public void setCity(String city) {
-        this.city = city;
-    }
+        for (String code : countryCodes) {
+            if (code.equals(countryCode)) {
+                return true;
+            }
+        }
 
-    public String getStreet() {
-        return street;
-    }
-
-    public void setStreet(String street) {
-        this.street = street;
-    }
-
-    public String getHouseNumber() {
-        return houseNumber;
-    }
-
-    public void setHouseNumber(String houseNumber) {
-        this.houseNumber = houseNumber;
-    }
-
-    public String getZipcode() {
-        return zipcode;
-    }
-
-    public void setZipcode(String zipcode) {
-        this.zipcode = zipcode;
-    }
-
-    public String getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(String latitude) {
-        this.latitude = latitude;
-    }
-
-    public String getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(String longitude) {
-        this.longitude = longitude;
-    }
-
-    public int getDistanceInKm() {
-        return distanceInKm;
-    }
-
-    public void setDistanceInKm(int distanceInKm) {
-        this.distanceInKm = distanceInKm;
+        return false;
     }
 }
