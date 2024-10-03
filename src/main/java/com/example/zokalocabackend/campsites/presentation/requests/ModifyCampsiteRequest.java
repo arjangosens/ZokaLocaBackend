@@ -1,26 +1,25 @@
-package com.example.zokalocabackend.campsites.presentation.datatransferobjects;
+package com.example.zokalocabackend.campsites.presentation.requests;
 
-import com.example.zokalocabackend.campsites.domain.*;
+import com.example.zokalocabackend.campsites.domain.SurroundingProximity;
+import com.example.zokalocabackend.campsites.presentation.datatransferobjects.*;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 
-import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 @AllArgsConstructor
 @SuperBuilder
 @Getter
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "campsiteType")
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = BuildingDTO.class, name = "BUILDING"),
-        @JsonSubTypes.Type(value = FieldDTO.class, name = "FIELD")
+        @JsonSubTypes.Type(value = ModifyBuildingRequest.class, name = "BUILDING"),
+        @JsonSubTypes.Type(value = ModifyFieldRequest.class, name = "FIELD")
 })
-public abstract class CampsiteDTO {
+public abstract class ModifyCampsiteRequest {
     private final String id;
     private final String name;
     private final String description;

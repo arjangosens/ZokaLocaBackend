@@ -2,92 +2,95 @@ package com.example.zokalocabackend.campsites.presentation.mappers;
 
 import com.example.zokalocabackend.campsites.domain.*;
 import com.example.zokalocabackend.campsites.presentation.datatransferobjects.*;
+import com.example.zokalocabackend.campsites.presentation.requests.ModifyBuildingRequest;
+import com.example.zokalocabackend.campsites.presentation.requests.ModifyCampsiteRequest;
+import com.example.zokalocabackend.campsites.presentation.requests.ModifyFieldRequest;
+import com.example.zokalocabackend.campsites.presentation.responses.GetCampsiteResponse;
+import com.example.zokalocabackend.campsites.presentation.responses.GetBuildingResponse;
+import com.example.zokalocabackend.campsites.presentation.responses.GetFieldResponse;
 
-import java.util.List;
 import java.util.Set;
 
 public class CampsiteMapper {
-    public static CampsiteDTO toCampsiteDTO(Campsite campsite) {
-        List<String> facilities = campsite.getFacilities().stream().map(Facility::getId).toList();
-        if (campsite instanceof Building building) {
-            return BuildingDTO.builder()
-                    .id(campsite.getId())
-                    .name(campsite.getName())
-                    .description(campsite.getDescription())
-                    .address(toAddressDTO(campsite.getAddress()))
-                    .personLimit(toPersonLimitDTO(campsite.getPersonLimit()))
-                    .price(toCampsitePriceDTO(campsite.getPrice()))
-                    .arrivalTime(campsite.getArrivalTime())
-                    .departureTime(campsite.getDepartureTime())
-                    .numOfToilets(campsite.getNumOfToilets())
-                    .numOfShowers(campsite.getNumOfShowers())
-                    .numOfWaterSources(campsite.getNumOfWaterSources())
-                    .surroundings(campsite.getSurroundings())
-                    .facilityIds(facilities)
-                    .campGroundId(campsite.getCampGroundId())
-                    .numOfRooms(building.getNumOfRooms())
-                    .numOfCommonAreas(building.getNumOfCommonAreas())
+
+    public static Campsite toCampsite(ModifyCampsiteRequest request, Set<Facility> facilities) {
+        if (request instanceof ModifyBuildingRequest buildingRequest) {
+            return Building.builder()
+                    .name(request.getName())
+                    .description(request.getDescription())
+                    .address(toAddress(request.getAddress()))
+                    .personLimit(toPersonLimit(request.getPersonLimit()))
+                    .price(toCampsitePrice(request.getPrice()))
+                    .arrivalTime(request.getArrivalTime())
+                    .departureTime(request.getDepartureTime())
+                    .numOfToilets(request.getNumOfToilets())
+                    .numOfShowers(request.getNumOfShowers())
+                    .numOfWaterSources(request.getNumOfWaterSources())
+                    .surroundings(request.getSurroundings())
+                    .facilities(facilities)
+                    .campGroundId(request.getCampGroundId())
+                    .numOfRooms(buildingRequest.getNumOfRooms())
+                    .numOfCommonAreas(buildingRequest.getNumOfCommonAreas())
                     .build();
-        } else if (campsite instanceof Field field) {
-            return FieldDTO.builder()
-                    .id(campsite.getId())
-                    .name(campsite.getName())
-                    .description(campsite.getDescription())
-                    .address(toAddressDTO(campsite.getAddress()))
-                    .personLimit(toPersonLimitDTO(campsite.getPersonLimit()))
-                    .price(toCampsitePriceDTO(campsite.getPrice()))
-                    .arrivalTime(campsite.getArrivalTime())
-                    .departureTime(campsite.getDepartureTime())
-                    .numOfToilets(campsite.getNumOfToilets())
-                    .numOfShowers(campsite.getNumOfShowers())
-                    .numOfWaterSources(campsite.getNumOfWaterSources())
-                    .surroundings(campsite.getSurroundings())
-                    .facilityIds(facilities)
-                    .campGroundId(campsite.getCampGroundId())
-                    .sizeSquareMeters(field.getSizeSquareMeters())
+        } else if (request instanceof ModifyFieldRequest fieldRequest) {
+            return Field.builder()
+                    .name(request.getName())
+                    .description(request.getDescription())
+                    .address(toAddress(request.getAddress()))
+                    .personLimit(toPersonLimit(request.getPersonLimit()))
+                    .price(toCampsitePrice(request.getPrice()))
+                    .arrivalTime(request.getArrivalTime())
+                    .departureTime(request.getDepartureTime())
+                    .numOfToilets(request.getNumOfToilets())
+                    .numOfShowers(request.getNumOfShowers())
+                    .numOfWaterSources(request.getNumOfWaterSources())
+                    .surroundings(request.getSurroundings())
+                    .facilities(facilities)
+                    .campGroundId(request.getCampGroundId())
+                    .sizeSquareMeters(fieldRequest.getSizeSquareMeters())
                     .build();
         } else {
             throw new IllegalArgumentException("Unknown campsite type");
         }
     }
 
-    public static Campsite toCampsite(CampsiteDTO dto, Set<Facility> facilities) {
-        if (dto instanceof BuildingDTO buildingDTO) {
-            return Building.builder()
-                    .id(dto.getId())
-                    .name(dto.getName())
-                    .description(dto.getDescription())
-                    .address(toAddress(dto.getAddress()))
-                    .personLimit(toPersonLimit(dto.getPersonLimit()))
-                    .price(toCampsitePrice(dto.getPrice()))
-                    .arrivalTime(dto.getArrivalTime())
-                    .departureTime(dto.getDepartureTime())
-                    .numOfToilets(dto.getNumOfToilets())
-                    .numOfShowers(dto.getNumOfShowers())
-                    .numOfWaterSources(dto.getNumOfWaterSources())
-                    .surroundings(dto.getSurroundings())
-                    .facilities(facilities)
-                    .campGroundId(dto.getCampGroundId())
-                    .numOfRooms(buildingDTO.getNumOfRooms())
-                    .numOfCommonAreas(buildingDTO.getNumOfCommonAreas())
+    public static GetCampsiteResponse toGetCampsiteResponse(Campsite campsite) {
+        if (campsite instanceof Building building) {
+            return GetBuildingResponse.builder()
+                    .id(campsite.getId())
+                    .name(campsite.getName())
+                    .description(campsite.getDescription())
+                    .address(toAddressDTO(campsite.getAddress()))
+                    .personLimit(toPersonLimitDTO(campsite.getPersonLimit()))
+                    .price(toCampsitePriceDTO(campsite.getPrice()))
+                    .arrivalTime(campsite.getArrivalTime())
+                    .departureTime(campsite.getDepartureTime())
+                    .numOfToilets(campsite.getNumOfToilets())
+                    .numOfShowers(campsite.getNumOfShowers())
+                    .numOfWaterSources(campsite.getNumOfWaterSources())
+                    .surroundings(campsite.getSurroundings())
+                    .facilities(FacilityMapper.toGetFacilityResponsesList(campsite.getFacilities().stream().toList()))
+                    .campGroundId(campsite.getCampGroundId())
+                    .numOfRooms(building.getNumOfRooms())
+                    .numOfCommonAreas(building.getNumOfCommonAreas())
                     .build();
-        } else if (dto instanceof FieldDTO fieldDTO) {
-            return Field.builder()
-                    .id(dto.getId())
-                    .name(dto.getName())
-                    .description(dto.getDescription())
-                    .address(toAddress(dto.getAddress()))
-                    .personLimit(toPersonLimit(dto.getPersonLimit()))
-                    .price(toCampsitePrice(dto.getPrice()))
-                    .arrivalTime(dto.getArrivalTime())
-                    .departureTime(dto.getDepartureTime())
-                    .numOfToilets(dto.getNumOfToilets())
-                    .numOfShowers(dto.getNumOfShowers())
-                    .numOfWaterSources(dto.getNumOfWaterSources())
-                    .surroundings(dto.getSurroundings())
-                    .facilities(facilities)
-                    .campGroundId(dto.getCampGroundId())
-                    .sizeSquareMeters(fieldDTO.getSizeSquareMeters())
+        } else if (campsite instanceof Field field) {
+            return GetFieldResponse.builder()
+                    .id(campsite.getId())
+                    .name(campsite.getName())
+                    .description(campsite.getDescription())
+                    .address(toAddressDTO(campsite.getAddress()))
+                    .personLimit(toPersonLimitDTO(campsite.getPersonLimit()))
+                    .price(toCampsitePriceDTO(campsite.getPrice()))
+                    .arrivalTime(campsite.getArrivalTime())
+                    .departureTime(campsite.getDepartureTime())
+                    .numOfToilets(campsite.getNumOfToilets())
+                    .numOfShowers(campsite.getNumOfShowers())
+                    .numOfWaterSources(campsite.getNumOfWaterSources())
+                    .surroundings(campsite.getSurroundings())
+                    .facilities(FacilityMapper.toGetFacilityResponsesList(campsite.getFacilities().stream().toList()))
+                    .campGroundId(campsite.getCampGroundId())
+                    .sizeSquareMeters(field.getSizeSquareMeters())
                     .build();
         } else {
             throw new IllegalArgumentException("Unknown campsite type");

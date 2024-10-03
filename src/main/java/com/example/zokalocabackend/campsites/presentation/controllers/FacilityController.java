@@ -4,7 +4,7 @@ import com.example.zokalocabackend.campsites.presentation.mappers.FacilityMapper
 import com.example.zokalocabackend.campsites.application.services.FacilityService;
 import com.example.zokalocabackend.campsites.domain.Facility;
 import com.example.zokalocabackend.campsites.presentation.requests.ModifyFacilityRequest;
-import com.example.zokalocabackend.campsites.presentation.responses.GetFacilityResponse;
+import com.example.zokalocabackend.campsites.presentation.datatransferobjects.FacilityDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,13 +22,13 @@ public class FacilityController {
     }
 
     @GetMapping
-    public ResponseEntity<List<GetFacilityResponse>> getAllFacilities() {
+    public ResponseEntity<List<FacilityDTO>> getAllFacilities() {
         List<Facility> facilities = facilityService.getAllFacilities();
         return ResponseEntity.ok(FacilityMapper.toGetFacilityResponsesList(facilities));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<GetFacilityResponse> getFacility(@PathVariable String id) {
+    public ResponseEntity<FacilityDTO> getFacility(@PathVariable String id) {
         Facility facility = facilityService.getFacilityById(id);
         return ResponseEntity.ok(FacilityMapper.toGetFacilityResponse(facility));
     }
