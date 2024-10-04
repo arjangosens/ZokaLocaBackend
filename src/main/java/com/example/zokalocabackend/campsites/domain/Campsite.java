@@ -38,6 +38,7 @@ public abstract class Campsite {
     private int numOfShowers;
     private int numOfWaterSources;
     private HashMap<String, SurroundingProximity> surroundings;
+    private HashMap<String, String> externalSources;
 
     @DBRef
     private Set<Facility> facilities;

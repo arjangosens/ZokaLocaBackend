@@ -55,6 +55,7 @@ public class CampsiteService {
         campsiteToUpdate.setNumOfShowers(campsite.getNumOfShowers());
         campsiteToUpdate.setNumOfWaterSources(campsite.getNumOfWaterSources());
         campsiteToUpdate.setSurroundings(campsite.getSurroundings());
+        campsiteToUpdate.setExternalSources(campsite.getExternalSources());
         campsiteToUpdate.setFacilities(campsite.getFacilities());
         campsiteToUpdate.setCampGroundId(campsite.getCampGroundId());
 

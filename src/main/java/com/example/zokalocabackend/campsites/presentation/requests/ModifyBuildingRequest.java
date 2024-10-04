@@ -16,8 +16,8 @@ public class ModifyBuildingRequest extends ModifyCampsiteRequest{
     private final int numOfRooms;
     private final int numOfCommonAreas;
 
-    public ModifyBuildingRequest(String id, String name, String description, AddressDTO address, PersonLimitDTO personLimit, CampsitePriceDTO price, String arrivalTime, String departureTime, int numOfToilets, int numOfShowers, int numOfWaterSources, HashMap<String, SurroundingProximity> surroundings, List<String> facilityIds, String campGroundId, int numOfRooms, int numOfCommonAreas) {
-        super(id, name, description, address, personLimit, price, arrivalTime, departureTime, numOfToilets, numOfShowers, numOfWaterSources, surroundings, facilityIds, campGroundId);
+    public ModifyBuildingRequest(String id, String name, String description, AddressDTO address, PersonLimitDTO personLimit, CampsitePriceDTO price, String arrivalTime, String departureTime, int numOfToilets, int numOfShowers, int numOfWaterSources, HashMap<String, SurroundingProximity> surroundings, HashMap<String, String> externalSources, List<String> facilityIds, String campGroundId, int numOfRooms, int numOfCommonAreas) {
+        super(id, name, description, address, personLimit, price, arrivalTime, departureTime, numOfToilets, numOfShowers, numOfWaterSources, surroundings, externalSources, facilityIds, campGroundId);
         this.numOfRooms = numOfRooms;
         this.numOfCommonAreas = numOfCommonAreas;
     }

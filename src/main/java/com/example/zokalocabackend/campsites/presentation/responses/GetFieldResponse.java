@@ -15,8 +15,8 @@ import java.util.List;
 public class GetFieldResponse extends GetCampsiteResponse{
     private final int sizeSquareMeters;
 
-    public GetFieldResponse(String id, String name, String description, AddressDTO address, PersonLimitDTO personLimit, CampsitePriceDTO price, String arrivalTime, String departureTime, int numOfToilets, int numOfShowers, int numOfWaterSources, HashMap<String, SurroundingProximity> surroundings, List<FacilityDTO> facilities, String campGroundId, int sizeSquareMeters) {
-        super(id, name, description, address, personLimit, price, arrivalTime, departureTime, numOfToilets, numOfShowers, numOfWaterSources, surroundings, facilities, campGroundId);
+    public GetFieldResponse(String id, String name, String description, AddressDTO address, PersonLimitDTO personLimit, CampsitePriceDTO price, String arrivalTime, String departureTime, int numOfToilets, int numOfShowers, int numOfWaterSources, HashMap<String, SurroundingProximity> surroundings, HashMap<String, String> externalSources, List<FacilityDTO> facilities, String campGroundId, int sizeSquareMeters) {
+        super(id, name, description, address, personLimit, price, arrivalTime, departureTime, numOfToilets, numOfShowers, numOfWaterSources, surroundings, externalSources, facilities, campGroundId);
         this.sizeSquareMeters = sizeSquareMeters;
     }
 }

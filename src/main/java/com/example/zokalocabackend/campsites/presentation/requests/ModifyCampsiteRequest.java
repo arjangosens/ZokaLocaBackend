@@ -32,6 +32,7 @@ public abstract class ModifyCampsiteRequest {
     private final int numOfShowers;
     private final int numOfWaterSources;
     private final HashMap<String, SurroundingProximity> surroundings;
+    private final HashMap<String, String> externalSources;
     private final List<String> facilityIds;
     private final String campGroundId;
 }
