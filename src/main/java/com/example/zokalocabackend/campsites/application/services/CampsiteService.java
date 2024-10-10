@@ -6,6 +6,8 @@ import com.example.zokalocabackend.campsites.domain.Field;
 import com.example.zokalocabackend.campsites.persistence.CampsiteRepository;
 import com.example.zokalocabackend.exceptions.DuplicateResourceException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,8 +21,8 @@ public class CampsiteService {
         this.campsiteRepository = campsiteRepository;
     }
 
-    public List<Campsite> getAllCampsites() {
-        return campsiteRepository.findAll();
+    public Page<Campsite> getAllCampsites(Pageable pageable) {
+        return campsiteRepository.findAll(pageable);
     }
 
     public Campsite getCampsiteById(String id) {

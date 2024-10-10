@@ -21,6 +21,7 @@ import java.util.List;
 public abstract class GetCampsiteResponse {
     private final String id;
     private final String name;
+    private final String campsiteType;
     private final String description;
     private final AddressDTO address;
     private final PersonLimitDTO personLimit;

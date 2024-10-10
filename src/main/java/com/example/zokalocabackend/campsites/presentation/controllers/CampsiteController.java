@@ -8,12 +8,13 @@ import com.example.zokalocabackend.campsites.presentation.mappers.CampsiteMapper
 import com.example.zokalocabackend.campsites.presentation.requests.ModifyCampsiteRequest;
 import com.example.zokalocabackend.campsites.presentation.responses.GetCampsiteResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -29,13 +30,15 @@ public class CampsiteController {
     }
 
     @GetMapping
-    public ResponseEntity<List<GetCampsiteResponse>> getAllCampsites() {
-        List<Campsite> campsites = campsiteService.getAllCampsites();
-        List<GetCampsiteResponse> getCampsiteResponses = new ArrayList<>();
-
-        for (Campsite campsite : campsites) {
-            getCampsiteResponses.add(CampsiteMapper.toGetCampsiteResponse(campsite));
-        }
+    public ResponseEntity<Page<GetCampsiteResponse>> getAllCampsites(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "name") String sortBy,
+            @RequestParam(defaultValue = "asc") String sortOrder
+    ) {
+        Sort sort = Sort.by(Sort.Direction.fromString(sortOrder), sortBy);
+        Pageable pageable = PageRequest.of(page, 20, sort); //TODO: Change to something reasonable when done testing
+        Page<Campsite> campsites = campsiteService.getAllCampsites(pageable);
+        Page<GetCampsiteResponse> getCampsiteResponses = campsites.map(CampsiteMapper::toGetCampsiteResponse);
 
         return ResponseEntity.ok(getCampsiteResponses);
     }
