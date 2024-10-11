@@ -53,11 +53,18 @@ public class FilterableCampsiteRepositoryImpl implements FilterableCampsiteRepos
     }
 
     private void addDistanceCriteria(Query query, CampsiteFilter filter) {
-        if (filter.getMinDistanceInKm() != null) {
-            query.addCriteria(Criteria.where("address.distanceInKm").gte(filter.getMinDistanceInKm()));
-        }
-        if (filter.getMaxDistanceInKm() != null) {
-            query.addCriteria(Criteria.where("address.distanceInKm").lte(filter.getMaxDistanceInKm()));
+        if (filter.getMinDistanceInKm() != null && filter.getMaxDistanceInKm() != null) {
+            query.addCriteria(new Criteria().andOperator(
+                    Criteria.where("address.distanceInKm").gte(filter.getMinDistanceInKm()),
+                    Criteria.where("address.distanceInKm").lte(filter.getMaxDistanceInKm())
+            ));
+        } else {
+            if (filter.getMinDistanceInKm() != null) {
+                query.addCriteria(Criteria.where("address.distanceInKm").gte(filter.getMinDistanceInKm()));
+            }
+            if (filter.getMaxDistanceInKm() != null) {
+                query.addCriteria(Criteria.where("address.distanceInKm").lte(filter.getMaxDistanceInKm()));
+            }
         }
     }
 
