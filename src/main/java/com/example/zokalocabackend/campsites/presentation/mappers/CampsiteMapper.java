@@ -2,6 +2,7 @@ package com.example.zokalocabackend.campsites.presentation.mappers;
 
 import com.example.zokalocabackend.campsites.domain.*;
 import com.example.zokalocabackend.campsites.presentation.datatransferobjects.*;
+import com.example.zokalocabackend.campsites.presentation.requests.GetAllCampsitesRequest;
 import com.example.zokalocabackend.campsites.presentation.requests.ModifyBuildingRequest;
 import com.example.zokalocabackend.campsites.presentation.requests.ModifyCampsiteRequest;
 import com.example.zokalocabackend.campsites.presentation.requests.ModifyFieldRequest;
@@ -125,5 +126,9 @@ public class CampsiteMapper {
 
     public static CampsitePrice toCampsitePrice(CampsitePriceDTO dto) {
         return new CampsitePrice(dto.priceMode(), dto.amount());
+    }
+
+    public static CampsiteFilter toCampsiteFilter(GetAllCampsitesRequest request) {
+        return new CampsiteFilter(request.name(), request.campsiteType(), request.minDistanceInKm(), request.maxDistanceInKm(), request.numOfPeople(), request.facilityIds(), request.minNumOfToilets(), request.minNumOfShowers(), request.minNumOfWaterSources(), request.minNumOfRooms(), request.minNumOfCommonAreas(), request.minSizeSquareMeters());
     }
 }

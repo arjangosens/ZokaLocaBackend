@@ -2,6 +2,7 @@ package com.example.zokalocabackend.campsites.application.services;
 
 import com.example.zokalocabackend.campsites.domain.Building;
 import com.example.zokalocabackend.campsites.domain.Campsite;
+import com.example.zokalocabackend.campsites.domain.CampsiteFilter;
 import com.example.zokalocabackend.campsites.domain.Field;
 import com.example.zokalocabackend.campsites.persistence.CampsiteRepository;
 import com.example.zokalocabackend.exceptions.DuplicateResourceException;
@@ -21,8 +22,8 @@ public class CampsiteService {
         this.campsiteRepository = campsiteRepository;
     }
 
-    public Page<Campsite> getAllCampsites(Pageable pageable) {
-        return campsiteRepository.findAll(pageable);
+    public Page<Campsite> getAllCampsites(Pageable pageable, CampsiteFilter filter) {
+        return campsiteRepository.findAllWithFilters(pageable, filter);
     }
 
     public Campsite getCampsiteById(String id) {
