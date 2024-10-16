@@ -71,7 +71,10 @@ public class FilterableCampsiteRepositoryImpl implements FilterableCampsiteRepos
     private void addNumOfPeopleCriteria(Query query, CampsiteFilter filter) {
         if (filter.getNumOfPeople() != null) {
             query.addCriteria(Criteria.where("personLimit.minimum").lte(filter.getNumOfPeople()));
-            query.addCriteria(Criteria.where("personLimit.maximum").gte(filter.getNumOfPeople()));
+            query.addCriteria(new Criteria().orOperator(
+                    Criteria.where("personLimit.maximum").gte(filter.getNumOfPeople()),
+                    Criteria.where("personLimit.maximum").is(0)
+            ));
         }
     }
 

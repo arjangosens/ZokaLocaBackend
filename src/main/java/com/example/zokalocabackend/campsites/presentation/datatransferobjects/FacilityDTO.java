@@ -1,3 +1,5 @@
 package com.example.zokalocabackend.campsites.presentation.datatransferobjects;
 
-public record FacilityDTO(String id, String name) { }
+import jakarta.validation.constraints.NotBlank;
+
+public record FacilityDTO(String id, @NotBlank String name) { }

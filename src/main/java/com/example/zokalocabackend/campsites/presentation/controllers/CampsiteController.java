@@ -9,6 +9,7 @@ import com.example.zokalocabackend.campsites.presentation.mappers.CampsiteMapper
 import com.example.zokalocabackend.campsites.presentation.requests.GetAllCampsitesRequest;
 import com.example.zokalocabackend.campsites.presentation.requests.ModifyCampsiteRequest;
 import com.example.zokalocabackend.campsites.presentation.responses.GetCampsiteResponse;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -51,14 +52,14 @@ public class CampsiteController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createCampsite(@RequestBody ModifyCampsiteRequest modifyCampsiteRequest) {
+    public ResponseEntity<?> createCampsite(@Valid @RequestBody ModifyCampsiteRequest modifyCampsiteRequest) {
         Campsite campsite = CampsiteMapper.toCampsite(modifyCampsiteRequest, extractFacilities(modifyCampsiteRequest));
         campsiteService.createCampsite(campsite);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateCampsite(@PathVariable String id, @RequestBody ModifyCampsiteRequest modifyCampsiteRequest) {
+    public ResponseEntity<?> updateCampsite(@PathVariable String id, @Valid @RequestBody ModifyCampsiteRequest modifyCampsiteRequest) {
         Campsite campsite = CampsiteMapper.toCampsite(modifyCampsiteRequest, extractFacilities(modifyCampsiteRequest));
         campsiteService.updateCampsite(id, campsite);
         return ResponseEntity.ok().build();

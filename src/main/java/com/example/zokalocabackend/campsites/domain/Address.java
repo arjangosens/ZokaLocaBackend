@@ -1,5 +1,8 @@
 package com.example.zokalocabackend.campsites.domain;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -11,9 +14,12 @@ import java.util.Locale;
 public class Address {
 
     @NonNull
+    @NotBlank
+    @Size(min = 2, max = 2)
     private String country;
 
     @NonNull
+    @NotBlank
     private String city;
 
     private String street;
@@ -21,6 +27,8 @@ public class Address {
     private String zipcode;
     private String latitude;
     private String longitude;
+
+    @Min(0)
     private int distanceInKm;
 
     public Address(String country, String city, String street, String houseNumber, String zipcode, String latitude, String longitude, int distanceInKm) {

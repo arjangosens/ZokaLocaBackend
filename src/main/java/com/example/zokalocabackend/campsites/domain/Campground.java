@@ -1,5 +1,6 @@
 package com.example.zokalocabackend.campsites.domain;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
@@ -10,6 +11,7 @@ public class Campground {
     private String id;
 
     @Setter
+    @NotBlank
     private String name;
 
     public Campground() {}

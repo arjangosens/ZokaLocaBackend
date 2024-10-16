@@ -5,6 +5,7 @@ import com.example.zokalocabackend.campsites.application.services.FacilityServic
 import com.example.zokalocabackend.campsites.domain.Facility;
 import com.example.zokalocabackend.campsites.presentation.requests.ModifyFacilityRequest;
 import com.example.zokalocabackend.campsites.presentation.datatransferobjects.FacilityDTO;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,24 +35,15 @@ public class FacilityController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createFacility(@RequestBody ModifyFacilityRequest request) {
-        String name = request.name();
-        if (name == null || name.isEmpty()) {
-            throw new IllegalArgumentException("Facility name cannot be empty");
-        }
+    public ResponseEntity<?> createFacility(@Valid @RequestBody ModifyFacilityRequest request) {
 
-        facilityService.createFacility(name);
+        facilityService.createFacility(request.name());
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateFacility(@PathVariable String id, @RequestBody ModifyFacilityRequest request) {
-        String name = request.name();
-        if (name == null || name.isEmpty()) {
-            throw new IllegalArgumentException("Facility name cannot be empty");
-        }
-
-        facilityService.updateFacility(id, name);
+    public ResponseEntity<?> updateFacility(@PathVariable String id, @Valid @RequestBody ModifyFacilityRequest request) {
+        facilityService.updateFacility(id, request.name());
         return ResponseEntity.ok().build();
     }
 }

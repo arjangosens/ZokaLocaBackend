@@ -1,5 +1,7 @@
 package com.example.zokalocabackend.campsites.presentation.requests;
 
-public record ModifyCampgroundRequest(String name) {
+import jakarta.validation.constraints.NotBlank;
+
+public record ModifyCampgroundRequest(@NotBlank String name) {
 
 }

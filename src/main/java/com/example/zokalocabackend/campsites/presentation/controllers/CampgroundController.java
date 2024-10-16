@@ -5,6 +5,7 @@ import com.example.zokalocabackend.campsites.application.services.CampgroundServ
 import com.example.zokalocabackend.campsites.domain.Campground;
 import com.example.zokalocabackend.campsites.presentation.requests.ModifyCampgroundRequest;
 import com.example.zokalocabackend.campsites.presentation.responses.GetCampgroundResponse;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,24 +35,14 @@ public class CampgroundController {
     }
 
     @PostMapping
-    public ResponseEntity<?> CreateCampground(@RequestBody ModifyCampgroundRequest request) {
-        String name = request.name();
-        if (name == null || name.isEmpty()) {
-            throw new IllegalArgumentException("Campground name cannot be empty");
-        }
-
-        campgroundService.createCampground(name);
+    public ResponseEntity<?> CreateCampground(@Valid @RequestBody ModifyCampgroundRequest request) {
+        campgroundService.createCampground(request.name());
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> UpdateCampground(@PathVariable String id, @RequestBody ModifyCampgroundRequest request) {
-        String name = request.name();
-        if (name == null || name.isEmpty()) {
-            throw new IllegalArgumentException("Campground name cannot be empty");
-        }
-
-        campgroundService.updateCampground(id, name);
+    public ResponseEntity<?> UpdateCampground(@PathVariable String id, @Valid @RequestBody ModifyCampgroundRequest request) {
+        campgroundService.updateCampground(id, request.name());
         return ResponseEntity.ok().build();
     }
 }

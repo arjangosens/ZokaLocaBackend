@@ -1,5 +1,7 @@
 package com.example.zokalocabackend.campsites.domain;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
@@ -26,6 +28,7 @@ public abstract class Campsite {
     private String id;
 
     @NonNull
+    @NotBlank
     private String name;
 
     private String description;
@@ -34,9 +37,16 @@ public abstract class Campsite {
     private CampsitePrice price;
     private String arrivalTime;
     private String departureTime;
+
+    @Min(0)
     private int numOfToilets;
+
+    @Min(0)
     private int numOfShowers;
+
+    @Min(0)
     private int numOfWaterSources;
+
     private HashMap<String, SurroundingProximity> surroundings;
     private HashMap<String, String> externalSources;
 
