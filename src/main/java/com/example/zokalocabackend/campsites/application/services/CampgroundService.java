@@ -3,6 +3,8 @@ package com.example.zokalocabackend.campsites.application.services;
 import com.example.zokalocabackend.campsites.domain.Campground;
 import com.example.zokalocabackend.campsites.persistence.CampgroundRepository;
 import com.example.zokalocabackend.exceptions.DuplicateResourceException;
+import com.example.zokalocabackend.utilities.ValidationUtils;
+import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,10 +13,12 @@ import java.util.List;
 @Service
 public class CampgroundService {
     private final CampgroundRepository campgroundRepository;
+    private final Validator validator;
 
     @Autowired
-    public CampgroundService(CampgroundRepository campgroundRepository) {
+    public CampgroundService(CampgroundRepository campgroundRepository, Validator validator) {
         this.campgroundRepository = campgroundRepository;
+        this.validator = validator;
     }
 
     public Campground getCampgroundById(String id) {
@@ -30,7 +34,9 @@ public class CampgroundService {
             throw new DuplicateResourceException("Campground already exists");
         }
 
-        campgroundRepository.save(new Campground(name));
+        Campground campground = new Campground(name);
+        ValidationUtils.validateEntity(campground, validator);
+        campgroundRepository.save(campground);
     }
 
     public void updateCampground(String id, String name) {
@@ -42,6 +48,7 @@ public class CampgroundService {
             throw new DuplicateResourceException("Another campground already has the same name");
         }
 
+        ValidationUtils.validateEntity(campground, validator);
         campgroundRepository.save(campground);
     }
 }

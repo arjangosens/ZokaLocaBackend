@@ -6,6 +6,8 @@ import com.example.zokalocabackend.campsites.domain.CampsiteFilter;
 import com.example.zokalocabackend.campsites.domain.Field;
 import com.example.zokalocabackend.campsites.persistence.CampsiteRepository;
 import com.example.zokalocabackend.exceptions.DuplicateResourceException;
+import com.example.zokalocabackend.utilities.ValidationUtils;
+import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,10 +18,12 @@ import java.util.List;
 @Service
 public class CampsiteService {
     private final CampsiteRepository campsiteRepository;
+    private final Validator validator;
 
     @Autowired
-    public CampsiteService(CampsiteRepository campsiteRepository) {
+    public CampsiteService(CampsiteRepository campsiteRepository, Validator validator) {
         this.campsiteRepository = campsiteRepository;
+        this.validator = validator;
     }
 
     public Page<Campsite> getAllCampsites(Pageable pageable, CampsiteFilter filter) {
@@ -42,6 +46,7 @@ public class CampsiteService {
             building.setNumOfCommonAreas(building.getNumOfCommonAreas());
         }
 
+        ValidationUtils.validateEntity(campsite, validator);
         campsiteRepository.save(campsite);
     }
 
@@ -75,6 +80,7 @@ public class CampsiteService {
             throw new DuplicateResourceException("Another campsite already has the same name");
         }
 
+        ValidationUtils.validateEntity(campsiteToUpdate, validator);
         campsiteRepository.save(campsiteToUpdate);
     }
 }
