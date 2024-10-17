@@ -1,5 +1,6 @@
 package com.example.zokalocabackend.exceptions;
 
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -45,6 +46,11 @@ public class GlobalExceptionHandler {
         return generateErrorResponseEntity(HttpStatus.BAD_REQUEST, errors.entrySet().stream()
                 .map(entry -> entry.getKey() + " " + entry.getValue())
                 .collect(Collectors.joining(", ")));
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ErrorResponse> handleConstraintViolationException(ConstraintViolationException ex) {
+        return generateErrorResponseEntity(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
     private String getMessage(Throwable ex, String fallbackMessage) {
