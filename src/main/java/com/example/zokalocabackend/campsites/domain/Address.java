@@ -25,14 +25,14 @@ public class Address {
     private String street;
     private String houseNumber;
     private String zipcode;
-    private String latitude;
-    private String longitude;
+    private Double latitude;
+    private Double longitude;
 
     @Min(0)
     private int distanceInKm;
 
-    public Address(String country, String city, String street, String houseNumber, String zipcode, String latitude, String longitude, int distanceInKm) {
-        if (!isValidCountryCode(country)) {
+    public Address(String country, String city, String street, String houseNumber, String zipcode, Double latitude, Double longitude, int distanceInKm) {
+        if (isInvalidCountryCode(country)) {
             throw new IllegalArgumentException("Invalid country code");
         }
 
@@ -47,22 +47,22 @@ public class Address {
     }
 
     public void setCountry(@NonNull String country) {
-        if (!isValidCountryCode(country)) {
+        if (isInvalidCountryCode(country)) {
             throw new IllegalArgumentException("Invalid country code");
         }
 
         this.country = country;
     }
 
-    private boolean isValidCountryCode(String countryCode) {
+    private boolean isInvalidCountryCode(String countryCode) {
         String[] countryCodes = Locale.getISOCountries();
 
         for (String code : countryCodes) {
             if (code.equals(countryCode)) {
-                return true;
+                return false;
             }
         }
 
-        return false;
+        return true;
     }
 }
