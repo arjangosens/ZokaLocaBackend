@@ -17,6 +17,7 @@ jobs:
           java-version: '21'
 
       - name: Cache Gradle packages
+        id: cache-gradle
         uses: actions/cache@v2
         with:
           path: |
@@ -33,7 +34,7 @@ jobs:
         run: ./gradlew build -x test
 
     outputs:
-      gradle-cache: ${{ steps.cache.outputs.cache-hit }}
+      gradle-cache-key: ${{ steps.cache-gradle.outputs.cache-hit }}
 
   test:
     runs-on: ubuntu-latest
@@ -55,7 +56,7 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-          key: ${{ needs.build.outputs.gradle-cache }}
+          key: ${{ needs.build.outputs.gradle-cache-key }}
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
@@ -73,6 +74,7 @@ jobs:
   report:
     runs-on: ubuntu-latest
     needs: test
+    if: always()
 
     steps:
       - name: Download test report
