@@ -7,6 +7,7 @@ import com.example.zokalocabackend.campsites.presentation.datatransferobjects.Fa
 import com.example.zokalocabackend.campsites.presentation.datatransferobjects.PersonLimitDTO;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
+
 import java.util.HashMap;
 import java.util.List;
 

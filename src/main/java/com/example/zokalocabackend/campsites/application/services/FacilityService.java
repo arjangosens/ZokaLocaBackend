@@ -4,14 +4,11 @@ import com.example.zokalocabackend.campsites.domain.Facility;
 import com.example.zokalocabackend.campsites.persistence.FacilityRepository;
 import com.example.zokalocabackend.exceptions.DuplicateResourceException;
 import com.example.zokalocabackend.utilities.ValidationUtils;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class FacilityService {

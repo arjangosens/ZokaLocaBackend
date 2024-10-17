@@ -1,7 +1,9 @@
 package com.example.zokalocabackend.campsites.presentation.requests;
 
 import com.example.zokalocabackend.campsites.domain.SurroundingProximity;
-import com.example.zokalocabackend.campsites.presentation.datatransferobjects.*;
+import com.example.zokalocabackend.campsites.presentation.datatransferobjects.AddressDTO;
+import com.example.zokalocabackend.campsites.presentation.datatransferobjects.CampsitePriceDTO;
+import com.example.zokalocabackend.campsites.presentation.datatransferobjects.PersonLimitDTO;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import jakarta.validation.Valid;

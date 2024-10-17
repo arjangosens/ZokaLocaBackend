@@ -1,13 +1,15 @@
 package com.example.zokalocabackend.campsites.presentation.mappers;
 
 import com.example.zokalocabackend.campsites.domain.*;
-import com.example.zokalocabackend.campsites.presentation.datatransferobjects.*;
+import com.example.zokalocabackend.campsites.presentation.datatransferobjects.AddressDTO;
+import com.example.zokalocabackend.campsites.presentation.datatransferobjects.CampsitePriceDTO;
+import com.example.zokalocabackend.campsites.presentation.datatransferobjects.PersonLimitDTO;
 import com.example.zokalocabackend.campsites.presentation.requests.GetAllCampsitesRequest;
 import com.example.zokalocabackend.campsites.presentation.requests.ModifyBuildingRequest;
 import com.example.zokalocabackend.campsites.presentation.requests.ModifyCampsiteRequest;
 import com.example.zokalocabackend.campsites.presentation.requests.ModifyFieldRequest;
-import com.example.zokalocabackend.campsites.presentation.responses.GetCampsiteResponse;
 import com.example.zokalocabackend.campsites.presentation.responses.GetBuildingResponse;
+import com.example.zokalocabackend.campsites.presentation.responses.GetCampsiteResponse;
 import com.example.zokalocabackend.campsites.presentation.responses.GetFieldResponse;
 
 import java.util.Set;
