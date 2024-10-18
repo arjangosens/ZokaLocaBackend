@@ -34,7 +34,7 @@ jobs:
         run: ./gradlew build -x test
 
     outputs:
-      gradle-cache-key: ${{ steps.cache-gradle.outputs.cache-hit }}
+      gradle-cache-key: ${{ steps.cache-gradle.outputs.cache-key }}
 
   test:
     runs-on: ubuntu-latest
