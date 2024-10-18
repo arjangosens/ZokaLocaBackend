@@ -9,5 +9,4 @@ class ZokaLocaBackendApplicationTests {
     @Test
     void contextLoads() {
     }
-
 }
