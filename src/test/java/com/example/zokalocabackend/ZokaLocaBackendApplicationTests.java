@@ -9,12 +9,4 @@ class ZokaLocaBackendApplicationTests {
     @Test
     void contextLoads() {
     }
-
-
-    // Temporary failing test to check if CI works
-    @Test
-    void failingTest() {
-        assert false;
-    }
-
 }
