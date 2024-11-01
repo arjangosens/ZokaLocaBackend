@@ -1,6 +1,6 @@
 package com.example.zokalocabackend.application.services;
 
-import com.example.zokalocabackend.campsites.application.services.CampsiteService;
+import com.example.zokalocabackend.campsites.services.CampsiteService;
 import com.example.zokalocabackend.campsites.domain.*;
 import com.example.zokalocabackend.campsites.persistence.CampsiteRepository;
 import com.example.zokalocabackend.exceptions.DuplicateResourceException;

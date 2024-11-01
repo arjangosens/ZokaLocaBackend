@@ -1,11 +1,10 @@
 package com.example.zokalocabackend.application.services;
 
-import com.example.zokalocabackend.campsites.application.services.FacilityService;
+import com.example.zokalocabackend.campsites.services.FacilityService;
 import com.example.zokalocabackend.campsites.domain.Facility;
 import com.example.zokalocabackend.campsites.persistence.FacilityRepository;
 import com.example.zokalocabackend.exceptions.DuplicateResourceException;
 import jakarta.validation.ConstraintViolationException;
-import jakarta.validation.Validator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

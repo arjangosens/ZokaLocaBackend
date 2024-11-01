@@ -1,6 +1,6 @@
 package com.example.zokalocabackend.campsites.presentation.controllers;
 
-import com.example.zokalocabackend.campsites.application.services.CampgroundService;
+import com.example.zokalocabackend.campsites.services.CampgroundService;
 import com.example.zokalocabackend.campsites.domain.Campground;
 import com.example.zokalocabackend.campsites.presentation.mappers.CampgroundMapper;
 import com.example.zokalocabackend.campsites.presentation.requests.ModifyCampgroundRequest;

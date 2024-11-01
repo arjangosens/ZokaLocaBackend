@@ -1,4 +1,4 @@
-package com.example.zokalocabackend.campsites.application.services;
+package com.example.zokalocabackend.campsites.services;
 
 import com.example.zokalocabackend.campsites.domain.Building;
 import com.example.zokalocabackend.campsites.domain.Campsite;
