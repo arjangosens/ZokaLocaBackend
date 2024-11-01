@@ -1,11 +1,12 @@
 package com.example.zokalocabackend.features.usermanagement.domain;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
-
-import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -24,14 +25,15 @@ public class User {
     private String lastName;
 
     @NotBlank
+    @Email
     private String email;
 
     @NotBlank
-    private String password;
+    private String passwordHash;
 
-    @NotBlank
+    @NotNull
     private UserRole role;
 
     @DBRef(lazy = true)
-    private List<Branch> branches;
+    private Set<Branch> branches;
 }

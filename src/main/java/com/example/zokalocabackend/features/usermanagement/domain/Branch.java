@@ -4,8 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
-
-import java.util.List;
+import java.util.Set;
 
 @Getter
 @Builder
@@ -20,7 +19,7 @@ public class Branch {
     private String name;
 
     @DBRef(lazy = true)
-    private List<User> users;
+    private Set<User> users;
 
     public Branch(String name) {
         this.name = name;
