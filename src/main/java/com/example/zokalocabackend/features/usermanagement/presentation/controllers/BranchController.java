@@ -1,9 +1,11 @@
 package com.example.zokalocabackend.features.usermanagement.presentation.controllers;
 
 import com.example.zokalocabackend.features.usermanagement.domain.Branch;
+import com.example.zokalocabackend.features.usermanagement.domain.BranchFilter;
 import com.example.zokalocabackend.features.usermanagement.domain.User;
 import com.example.zokalocabackend.features.usermanagement.presentation.mappers.BranchMapper;
 import com.example.zokalocabackend.features.usermanagement.presentation.requests.CreateBranchRequest;
+import com.example.zokalocabackend.features.usermanagement.presentation.requests.GetAllBranchesRequest;
 import com.example.zokalocabackend.features.usermanagement.presentation.requests.UpdateBranchRequest;
 import com.example.zokalocabackend.features.usermanagement.presentation.responses.GetBranchResponse;
 import com.example.zokalocabackend.features.usermanagement.services.BranchService;
@@ -12,6 +14,10 @@ import com.example.zokalocabackend.features.usermanagement.services.UserService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,9 +41,15 @@ public class BranchController {
     }
 
     @GetMapping
-    public ResponseEntity<List<GetBranchResponse>> getAllBranches() {
-        List<Branch> branches = branchService.getAllBranches();
-        return ResponseEntity.ok(BranchMapper.toGetBranchResponsesList(branches));
+    public ResponseEntity<Page<GetBranchResponse>> getAllBranches(GetAllBranchesRequest request) {
+        Sort sort = Sort.by(Sort.Direction.fromString(request.sortOrder()), request.sortBy());
+        Pageable pageable = PageRequest.of(request.page(), request.pageSize(), sort);
+        BranchFilter filter = BranchMapper.toBranchFilter(request);
+
+        Page<Branch> branches = branchService.getAllBranches(pageable, filter);
+        Page<GetBranchResponse> getBranchResponses = branches.map(BranchMapper::toGetBranchResponse);
+
+        return ResponseEntity.ok(getBranchResponses);
     }
 
     @GetMapping("/{id}")

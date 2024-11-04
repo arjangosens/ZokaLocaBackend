@@ -1,9 +1,11 @@
 package com.example.zokalocabackend.features.usermanagement.presentation.mappers;
 
 import com.example.zokalocabackend.features.usermanagement.domain.Branch;
+import com.example.zokalocabackend.features.usermanagement.domain.BranchFilter;
 import com.example.zokalocabackend.features.usermanagement.domain.User;
 import com.example.zokalocabackend.features.usermanagement.presentation.datatransferobjects.BranchCollectionItemDTO;
 import com.example.zokalocabackend.features.usermanagement.presentation.requests.CreateBranchRequest;
+import com.example.zokalocabackend.features.usermanagement.presentation.requests.GetAllBranchesRequest;
 import com.example.zokalocabackend.features.usermanagement.presentation.requests.UpdateBranchRequest;
 import com.example.zokalocabackend.features.usermanagement.presentation.responses.GetBranchResponse;
 
@@ -47,5 +49,11 @@ public class BranchMapper {
 
     public static Branch toBranch(UpdateBranchRequest updateBranchRequest, String id, Set<User> users) {
         return new Branch(id, updateBranchRequest.name(), users);
+    }
+
+    public static BranchFilter toBranchFilter(GetAllBranchesRequest request) {
+        return BranchFilter.builder()
+                .name(request.name())
+                .build();
     }
 }
