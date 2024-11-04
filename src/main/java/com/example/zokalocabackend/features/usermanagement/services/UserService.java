@@ -4,6 +4,7 @@ import com.example.zokalocabackend.exceptions.DuplicateResourceException;
 import com.example.zokalocabackend.features.usermanagement.domain.User;
 import com.example.zokalocabackend.features.usermanagement.persistence.UserRepository;
 import com.example.zokalocabackend.utilities.ValidationUtils;
+import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+/**
+ * Service class for managing users.
+ */
 @Service
 public class UserService {
     private final UserRepository userRepository;
@@ -22,23 +26,54 @@ public class UserService {
         this.validator = validator;
     }
 
+    /**
+     * Retrieves a user by their ID.
+     *
+     * @param id the ID of the user to retrieve
+     * @return the user with the specified ID
+     * @throws NoSuchElementException if no user with the specified ID is found
+     */
     public User getUserById(String id) {
         return userRepository.findById(id).orElseThrow();
     }
 
+    /**
+     * Retrieves all users.
+     *
+     * @return a list of all users
+     */
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
-    public void createUser(User user) {
+    /**
+     * Creates a new user.
+     *
+     * @param user the user to create
+     * @return the created user
+     * @throws DuplicateResourceException if a user with the same email already exists
+     * @throws ConstraintViolationException if the user entity is invalid
+     */
+    public User createUser(User user) {
         if (userRepository.existsByEmailIgnoreCase(user.getEmail())) {
             throw new DuplicateResourceException("Email already exists");
         }
 
         ValidationUtils.validateEntity(user, validator);
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 
+    /**
+     * Updates a user.
+     * <p>
+     * Note: This method does not update the branches of the user. The UserBranchService should be used for that.
+     *
+     * @param id the ID of the user to update
+     * @param user the updated user
+     * @throws NoSuchElementException if no user with the specified ID is found
+     * @throws DuplicateResourceException if another user already has the same email
+     * @throws ConstraintViolationException if the updated user entity is invalid
+     */
     public void updateUser(String id, User user) {
         User existingUser = userRepository.findById(id).orElseThrow();
         existingUser.setEmail(user.getEmail());
@@ -46,7 +81,6 @@ public class UserService {
         existingUser.setLastName(user.getLastName());
         existingUser.setRole(user.getRole());
         existingUser.setPasswordHash(user.getPasswordHash());
-        existingUser.setBranches(user.getBranches());
 
         User existingUserByEmail = userRepository.findByEmailIgnoreCase(user.getEmail());
         if (existingUserByEmail != null && !existingUserByEmail.getId().equals(id)) {
@@ -57,6 +91,12 @@ public class UserService {
         userRepository.save(existingUser);
     }
 
+    /**
+     * Deletes a user by their ID.
+     *
+     * @param id the ID of the user to delete
+     * @throws NoSuchElementException if no user with the specified ID is found
+     */
     public void deleteUser(String id) {
         if (!userRepository.existsById(id)) {
             throw new NoSuchElementException("User not found");

@@ -8,6 +8,7 @@ import com.example.zokalocabackend.features.usermanagement.presentation.requests
 import com.example.zokalocabackend.features.usermanagement.presentation.responses.GetUserResponse;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -26,8 +27,8 @@ public class UserMapper {
         return userResponses;
     }
 
-    public static User toUser(RegisterUserRequest registerUserRequest, String passwordHash, Set<Branch> branches) {
-        return new User(null, registerUserRequest.firstName(), registerUserRequest.lastName(), registerUserRequest.email(), passwordHash, registerUserRequest.role(), branches);
+    public static User toUser(RegisterUserRequest registerUserRequest, String passwordHash) {
+        return new User(null, registerUserRequest.firstName(), registerUserRequest.lastName(), registerUserRequest.email(), passwordHash, registerUserRequest.role(), new HashSet<>());
     }
 
     public static User toUser(UpdateUserRequest updateUserRequest, User existingUser, Set<Branch> branches) {

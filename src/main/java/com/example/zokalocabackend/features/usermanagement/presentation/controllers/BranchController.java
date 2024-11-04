@@ -7,6 +7,7 @@ import com.example.zokalocabackend.features.usermanagement.presentation.requests
 import com.example.zokalocabackend.features.usermanagement.presentation.requests.UpdateBranchRequest;
 import com.example.zokalocabackend.features.usermanagement.presentation.responses.GetBranchResponse;
 import com.example.zokalocabackend.features.usermanagement.services.BranchService;
+import com.example.zokalocabackend.features.usermanagement.services.UserBranchService;
 import com.example.zokalocabackend.features.usermanagement.services.UserService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -23,11 +25,13 @@ import java.util.Set;
 public class BranchController {
     private final BranchService branchService;
     private final UserService userService;
+    private final UserBranchService userBranchService;
 
     @Autowired
-    public BranchController(BranchService branchService, UserService userService) {
+    public BranchController(BranchService branchService, UserService userService, UserBranchService userBranchService) {
         this.branchService = branchService;
         this.userService = userService;
+        this.userBranchService = userBranchService;
     }
 
     @GetMapping
@@ -54,6 +58,8 @@ public class BranchController {
         Set<User> users = extractUsers(updateBranchRequest.userIds());
         Branch branch = BranchMapper.toBranch(updateBranchRequest, id, users);
         branchService.updateBranch(id, branch);
+        userBranchService.setBranchUsers(id, updateBranchRequest.userIds().toArray(new String[0]));
+
         return ResponseEntity.ok().build();
     }
 
