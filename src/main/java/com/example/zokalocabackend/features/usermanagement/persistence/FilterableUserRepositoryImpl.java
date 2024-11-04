@@ -2,10 +2,12 @@ package com.example.zokalocabackend.features.usermanagement.persistence;
 
 import com.example.zokalocabackend.features.usermanagement.domain.User;
 import com.example.zokalocabackend.features.usermanagement.domain.UserFilter;
+import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
@@ -60,7 +62,7 @@ public class FilterableUserRepositoryImpl implements FilterableUserRepository {
 
     private void addBranchesCriteria(Query query, UserFilter filter) {
         if (filter.getBranchId() != null && !filter.getBranchId().isEmpty()) {
-            query.addCriteria(Criteria.where("branches").elemMatch(Criteria.where("id").is(filter.getBranchId())));
+            query.addCriteria(Criteria.where("branches.$id").is(new ObjectId(filter.getBranchId())));
         }
     }
 }
