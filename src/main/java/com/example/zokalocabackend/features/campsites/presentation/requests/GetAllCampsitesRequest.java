@@ -4,6 +4,7 @@ import java.util.List;
 
 public record GetAllCampsitesRequest(
         Integer page,
+        Integer pageSize,
         String sortBy,
         String sortOrder,
         String name,
@@ -19,4 +20,18 @@ public record GetAllCampsitesRequest(
         Integer minNumOfCommonAreas,
         Integer minSizeSquareMeters
         ) {
+    public GetAllCampsitesRequest {
+        if (page == null) {
+            page = 0;
+        }
+        if (pageSize == null) {
+            pageSize = 20;
+        }
+        if (sortBy == null || sortBy.isBlank()) {
+            sortBy = "name";
+        }
+        if (sortOrder == null || sortOrder.isBlank()) {
+            sortOrder = "ASC";
+        }
+    }
 }

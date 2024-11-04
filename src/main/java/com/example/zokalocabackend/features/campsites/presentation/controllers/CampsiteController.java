@@ -36,7 +36,7 @@ public class CampsiteController {
     @GetMapping
     public ResponseEntity<Page<GetCampsiteResponse>> getAllCampsites(GetAllCampsitesRequest request) {
         Sort sort = Sort.by(Sort.Direction.fromString(request.sortOrder()), request.sortBy());
-        Pageable pageable = PageRequest.of(request.page(), 20, sort);
+        Pageable pageable = PageRequest.of(request.page(), request.pageSize(), sort);
         CampsiteFilter filter = CampsiteMapper.toCampsiteFilter(request);
 
         Page<Campsite> campsites = campsiteService.getAllCampsites(pageable, filter);
