@@ -40,16 +40,17 @@ public class BranchService {
         branchRepository.save(branch);
     }
 
-    public void updateBranch(String id, String name) {
-        Branch branch = branchRepository.findById(id).orElseThrow();
-        branch.setName(name);
-        Branch existingBranch = branchRepository.findByNameIgnoreCase(name);
+    public void updateBranch(String id, Branch branch) {
+        Branch existingBranch = branchRepository.findById(id).orElseThrow();
+        existingBranch.setName(branch.getName());
+        existingBranch.setUsers(branch.getUsers());
+        Branch existingBranchByName = branchRepository.findByNameIgnoreCase(branch.getName());
 
-        if (existingBranch != null && !existingBranch.getId().equals(id)) {
+        if (existingBranchByName != null && !existingBranchByName.getId().equals(id)) {
             throw new DuplicateResourceException("Another branch already has the same name");
         }
 
-        ValidationUtils.validateEntity(branch, validator);
-        branchRepository.save(branch);
+        ValidationUtils.validateEntity(existingBranch, validator);
+        branchRepository.save(existingBranch);
     }
 }

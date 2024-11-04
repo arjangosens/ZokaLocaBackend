@@ -6,20 +6,22 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import java.util.Set;
 
+@Setter
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Branch {
+
     @Id
+    @Setter(AccessLevel.PRIVATE)
     private String id;
 
-    @Setter
     @NotBlank
     private String name;
 
     @DBRef(lazy = true)
-    private Set<User> users;
+    private Set<User> users = Set.of();
 
     public Branch(String name) {
         this.name = name;

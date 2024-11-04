@@ -46,6 +46,7 @@ public class UserService {
         existingUser.setLastName(user.getLastName());
         existingUser.setRole(user.getRole());
         existingUser.setPasswordHash(user.getPasswordHash());
+        existingUser.setBranches(user.getBranches());
 
         User existingUserByEmail = userRepository.findByEmailIgnoreCase(user.getEmail());
         if (existingUserByEmail != null && !existingUserByEmail.getId().equals(id)) {
