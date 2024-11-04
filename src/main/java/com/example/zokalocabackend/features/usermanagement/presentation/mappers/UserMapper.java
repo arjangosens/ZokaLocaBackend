@@ -2,7 +2,9 @@ package com.example.zokalocabackend.features.usermanagement.presentation.mappers
 
 import com.example.zokalocabackend.features.usermanagement.domain.Branch;
 import com.example.zokalocabackend.features.usermanagement.domain.User;
+import com.example.zokalocabackend.features.usermanagement.domain.UserFilter;
 import com.example.zokalocabackend.features.usermanagement.presentation.datatransferobjects.UserCollectionItemDTO;
+import com.example.zokalocabackend.features.usermanagement.presentation.requests.GetAllUsersRequest;
 import com.example.zokalocabackend.features.usermanagement.presentation.requests.RegisterUserRequest;
 import com.example.zokalocabackend.features.usermanagement.presentation.requests.UpdateUserRequest;
 import com.example.zokalocabackend.features.usermanagement.presentation.responses.GetUserResponse;
@@ -47,5 +49,15 @@ public class UserMapper {
         }
 
         return userCollectionItemDTOs;
+    }
+
+    public static UserFilter toUserFilter(GetAllUsersRequest request) {
+        return UserFilter.builder()
+                .firstName(request.firstName())
+                .lastName(request.lastName())
+                .email(request.email())
+                .role(request.role())
+                .branchId(request.branchId())
+                .build();
     }
 }

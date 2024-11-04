@@ -2,11 +2,14 @@ package com.example.zokalocabackend.features.usermanagement.services;
 
 import com.example.zokalocabackend.exceptions.DuplicateResourceException;
 import com.example.zokalocabackend.features.usermanagement.domain.User;
+import com.example.zokalocabackend.features.usermanagement.domain.UserFilter;
 import com.example.zokalocabackend.features.usermanagement.persistence.UserRepository;
 import com.example.zokalocabackend.utilities.ValidationUtils;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -40,10 +43,12 @@ public class UserService {
     /**
      * Retrieves all users.
      *
+     * @param pageable the pagination information
+     * @param filter the filter to apply
      * @return a list of all users
      */
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public Page<User> getAllUsers(Pageable pageable, UserFilter filter) {
+        return userRepository.findAllWithFilters(pageable, filter);
     }
 
     /**

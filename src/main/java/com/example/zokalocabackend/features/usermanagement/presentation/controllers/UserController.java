@@ -3,7 +3,9 @@ package com.example.zokalocabackend.features.usermanagement.presentation.control
 import com.example.zokalocabackend.features.campsites.domain.Facility;
 import com.example.zokalocabackend.features.usermanagement.domain.Branch;
 import com.example.zokalocabackend.features.usermanagement.domain.User;
+import com.example.zokalocabackend.features.usermanagement.domain.UserFilter;
 import com.example.zokalocabackend.features.usermanagement.presentation.mappers.UserMapper;
+import com.example.zokalocabackend.features.usermanagement.presentation.requests.GetAllUsersRequest;
 import com.example.zokalocabackend.features.usermanagement.presentation.requests.RegisterUserRequest;
 import com.example.zokalocabackend.features.usermanagement.presentation.requests.UpdateUserRequest;
 import com.example.zokalocabackend.features.usermanagement.presentation.responses.GetUserResponse;
@@ -14,6 +16,10 @@ import com.example.zokalocabackend.features.usermanagement.services.UserService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,9 +44,15 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<GetUserResponse>> getAllUsers() {
-        List<User> users = userService.getAllUsers();
-        return ResponseEntity.ok(UserMapper.toGetUserResponsesList(users));
+    public ResponseEntity<Page<GetUserResponse>> getAllUsers(GetAllUsersRequest request) {
+        Sort sort = Sort.by(Sort.Direction.fromString(request.sortOrder()), request.sortBy());
+        Pageable pageable = PageRequest.of(request.page(), request.pageSize(), sort);
+        UserFilter filter = UserMapper.toUserFilter(request);
+
+        Page<User> users = userService.getAllUsers(pageable, filter);
+        Page<GetUserResponse> getUserResponses = users.map(UserMapper::toGetUserResponse);
+
+        return ResponseEntity.ok(getUserResponses);
     }
 
     @GetMapping("/{id}")

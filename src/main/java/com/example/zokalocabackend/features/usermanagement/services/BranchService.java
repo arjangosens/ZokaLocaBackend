@@ -47,7 +47,7 @@ public class BranchService {
         Branch existingBranchByName = branchRepository.findByNameIgnoreCase(branch.getName());
 
         if (existingBranchByName != null && !existingBranchByName.getId().equals(id)) {
-            throw new DuplicateResourceException("Another branch already has the same name");
+            throw new DuplicateResourceException("Another branch already has the same firstName");
         }
 
         ValidationUtils.validateEntity(existingBranch, validator);
