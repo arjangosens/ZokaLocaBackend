@@ -1,6 +1,5 @@
 package com.example.zokalocabackend.features.usermanagement.presentation.controllers;
 
-import com.example.zokalocabackend.features.campsites.domain.Facility;
 import com.example.zokalocabackend.features.usermanagement.domain.Branch;
 import com.example.zokalocabackend.features.usermanagement.domain.User;
 import com.example.zokalocabackend.features.usermanagement.domain.UserFilter;
@@ -8,7 +7,8 @@ import com.example.zokalocabackend.features.usermanagement.presentation.mappers.
 import com.example.zokalocabackend.features.usermanagement.presentation.requests.GetAllUsersRequest;
 import com.example.zokalocabackend.features.usermanagement.presentation.requests.RegisterUserRequest;
 import com.example.zokalocabackend.features.usermanagement.presentation.requests.UpdateUserRequest;
-import com.example.zokalocabackend.features.usermanagement.presentation.responses.GetUserResponse;
+import com.example.zokalocabackend.features.usermanagement.presentation.responses.GetAllUsersListItemResponse;
+import com.example.zokalocabackend.features.usermanagement.presentation.responses.GetUserByIdResponse;
 import com.example.zokalocabackend.features.usermanagement.services.BranchService;
 import com.example.zokalocabackend.features.usermanagement.services.PasswordEncodingService;
 import com.example.zokalocabackend.features.usermanagement.services.UserBranchService;
@@ -31,34 +31,33 @@ import java.util.Set;
 @RequestMapping("/users")
 public class UserController {
     private final UserService userService;
-    private final BranchService branchService;
     private final UserBranchService userBranchService;
     private final PasswordEncodingService passwordEncodingService;
 
     @Autowired
-    public UserController(UserService userService, BranchService branchService, UserBranchService userBranchService, PasswordEncodingService passwordEncodingService) {
+    public UserController(UserService userService, UserBranchService userBranchService, PasswordEncodingService passwordEncodingService) {
         this.userService = userService;
-        this.branchService = branchService;
         this.userBranchService = userBranchService;
         this.passwordEncodingService = passwordEncodingService;
     }
 
     @GetMapping
-    public ResponseEntity<Page<GetUserResponse>> getAllUsers(GetAllUsersRequest request) {
+    public ResponseEntity<Page<GetAllUsersListItemResponse>> getAllUsers(GetAllUsersRequest request) {
         Sort sort = Sort.by(Sort.Direction.fromString(request.sortOrder()), request.sortBy());
         Pageable pageable = PageRequest.of(request.page(), request.pageSize(), sort);
         UserFilter filter = UserMapper.toUserFilter(request);
 
         Page<User> users = userService.getAllUsers(pageable, filter);
-        Page<GetUserResponse> getUserResponses = users.map(UserMapper::toGetUserResponse);
+        Page<GetAllUsersListItemResponse> getUserResponses = users.map(UserMapper::toGetAllUsersListItemResponse);
 
         return ResponseEntity.ok(getUserResponses);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<GetUserResponse> getUserById(@PathVariable @NotBlank String id) {
+    public ResponseEntity<GetUserByIdResponse> getUserById(@PathVariable @NotBlank String id) {
         User user = userService.getUserById(id);
-        return ResponseEntity.ok(UserMapper.toGetUserResponse(user));
+        List<Branch> branches = userBranchService.getAllBranchesByUserId(id);
+        return ResponseEntity.ok(UserMapper.toGetUserByIdResponse(user, branches));
     }
 
     @PostMapping
@@ -67,7 +66,7 @@ public class UserController {
         User createdUser = userService.createUser(UserMapper.toUser(registerUserRequest, passwordHash));
 
         if (registerUserRequest.branchIds() != null && !registerUserRequest.branchIds().isEmpty()) {
-            userBranchService.setUserBranches(createdUser.getId(), registerUserRequest.branchIds().toArray(new String[0]));
+            userBranchService.setUserBranches(createdUser, registerUserRequest.branchIds());
         }
 
         return ResponseEntity.ok().build();
@@ -76,31 +75,18 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<?> updateUser(@PathVariable @NotBlank String id, @RequestBody @Valid UpdateUserRequest updateUserRequest) {
         User existingUser = userService.getUserById(id);
-        Set<Branch> branches = extractBranches(updateUserRequest.branchIds());
-        User updatedUser = UserMapper.toUser(updateUserRequest, existingUser, branches);
+        User updatedUser = UserMapper.toUser(updateUserRequest, existingUser);
         userService.updateUser(id, updatedUser);
-        userBranchService.setUserBranches(id, updateUserRequest.branchIds().toArray(new String[0]));
+        userBranchService.setUserBranches(updatedUser, updateUserRequest.branchIds());
 
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable @NotBlank String id) {
-        userBranchService.removeUserFromAllBranches(id, null);
+        User user = userService.getUserById(id);
+        userBranchService.removeUserFromAllBranches(user);
         userService.deleteUser(id);
         return ResponseEntity.ok().build();
-    }
-
-    private Set<Branch> extractBranches(List<String> branchIds) {
-        Set<Branch> branches = new HashSet<>();
-
-        if (branchIds != null) {
-            for (String branchId : branchIds) {
-                Branch branch = branchService.getBranchById(branchId);
-                branches.add(branch);
-            }
-        }
-
-        return branches;
     }
 }

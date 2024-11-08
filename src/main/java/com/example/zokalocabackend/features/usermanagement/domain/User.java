@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.util.Set;
 
 @Getter
@@ -13,6 +15,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Document
 public class User {
     @Id
     @Setter(AccessLevel.NONE)
@@ -33,7 +36,4 @@ public class User {
 
     @NotNull
     private UserRole role;
-
-    @DBRef(lazy = true)
-    private Set<Branch> branches;
 }

@@ -2,7 +2,9 @@ package com.example.zokalocabackend.features.usermanagement.services;
 
 import com.example.zokalocabackend.features.usermanagement.domain.Branch;
 import com.example.zokalocabackend.features.usermanagement.domain.User;
+import com.example.zokalocabackend.features.usermanagement.domain.UserBranch;
 import com.example.zokalocabackend.features.usermanagement.persistence.BranchRepository;
+import com.example.zokalocabackend.features.usermanagement.persistence.UserBranchRepository;
 import com.example.zokalocabackend.features.usermanagement.persistence.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,82 +18,115 @@ import java.util.NoSuchElementException;
  */
 @Service
 public class UserBranchService {
-    private final BranchRepository branchRepository;
+    private final UserBranchRepository userBranchRepository;
     private final UserRepository userRepository;
+    private final BranchRepository branchRepository;
 
     @Autowired
-    public UserBranchService(BranchRepository branchRepository, UserRepository userRepository) {
-        this.branchRepository = branchRepository;
+    public UserBranchService(UserBranchRepository userBranchRepository, UserRepository userRepository, BranchRepository branchRepository) {
+        this.userBranchRepository = userBranchRepository;
         this.userRepository = userRepository;
+        this.branchRepository = branchRepository;
+    }
+
+    /**
+     * Retrieves all branches associated with a given user ID.
+     *
+     * @param userId the ID of the user whose branches are to be retrieved
+     * @return a list of branches associated with the specified user
+     */
+    public List<Branch> getAllBranchesByUserId(String userId) {
+        List<UserBranch> userBranches = userBranchRepository.findAllByUserId(userId);
+        List<Branch> branches = new ArrayList<>();
+
+        for (UserBranch userBranch : userBranches) {
+            branches.add(userBranch.getBranch());
+        }
+
+        return branches;
+    }
+
+    /**
+     * Retrieves all users associated with a given branch ID.
+     *
+     * @param branchId the ID of the branch whose users are to be retrieved
+     * @return a list of users associated with the specified branch
+     */
+    public List<User> getAllUsersByBranchId(String branchId) {
+        List<UserBranch> userBranches = userBranchRepository.findAllByBranchId(branchId);
+        List<User> users = new ArrayList<>();
+
+        for (UserBranch userBranch : userBranches) {
+            users.add(userBranch.getUser());
+        }
+
+        return users;
     }
 
     /**
      * Sets the users for a given branch.
      * Also updates all the users associated with the branch.
      *
-     * @param branchId the ID of the branch
+     * @param branch the branch that the users will be associated with
      * @param userIds the IDs of the users to be associated with the branch
-     * @throws NoSuchElementException if no branch with the specified ID is found
+     * @throws NoSuchElementException if no user with the specified ID is found
      */
-    public void setBranchUsers(String branchId, String[] userIds) {
-        Branch branch = branchRepository.findById(branchId).orElseThrow();
-        branch.getUsers().clear();
+    public void setBranchUsers(Branch branch, List<String> userIds) {
+        List<UserBranch> userBranches = userBranchRepository.findAllByBranchId(branch.getId());
+
+        for (UserBranch userBranch : userBranches) {
+            if (!userIds.contains(userBranch.getUser().getId())) {
+                userBranchRepository.delete(userBranch);
+            }
+        }
 
         for (String userId : userIds) {
             User user = userRepository.findById(userId).orElseThrow();
-            branch.getUsers().add(user);
-            user.getBranches().add(branch);
-            userRepository.save(user);
+            if (!userBranchRepository.existsByUserIdAndBranchId(userId, branch.getId())) {
+                UserBranch userBranch = UserBranch.builder()
+                        .user(user)
+                        .branch(branch)
+                        .build();
+                userBranchRepository.save(userBranch);
+            }
         }
-
-        branchRepository.save(branch);
     }
 
     /**
      * Sets the branches for a given user.
      * Also updates all the branches to which the user is associated.
      *
-     * @param userId the ID of the user
+     * @param user the user that the branches will be associated with
      * @param branchIds the IDs of the branches to be associated with the user
-     * @throws NoSuchElementException if no user with the specified ID is found
+     * @throws NoSuchElementException if no branch with the specified ID is found
      */
-    public void setUserBranches(String userId, String[] branchIds) {
-        User user = userRepository.findById(userId).orElseThrow();
-        user.getBranches().clear();
+    public void setUserBranches(User user, List<String> branchIds) {
+        List<UserBranch> userBranches = userBranchRepository.findAllByUserId(user.getId());
+
+        for (UserBranch userBranch : userBranches) {
+            if (!branchIds.contains(userBranch.getBranch().getId())) {
+                userBranchRepository.delete(userBranch);
+            }
+        }
 
         for (String branchId : branchIds) {
             Branch branch = branchRepository.findById(branchId).orElseThrow();
-            user.getBranches().add(branch);
-            branch.getUsers().add(user);
-            branchRepository.save(branch);
+            if (!userBranchRepository.existsByUserIdAndBranchId(user.getId(), branchId)) {
+                UserBranch userBranch = UserBranch.builder()
+                        .user(user)
+                        .branch(branch)
+                        .build();
+                userBranchRepository.save(userBranch);
+            }
         }
-
-        userRepository.save(user);
     }
 
     /**
      * Removes a user from all branches.
      *
-     * @param userId the ID of the user to be removed from all branches
-     * @param excludedBranchIds the IDs of the branches from which the user should not be removed
-     * @throws NoSuchElementException if no user with the specified ID is found
+     * @param user the user to be removed from all branches
      */
-    public void removeUserFromAllBranches(String userId, List<String> excludedBranchIds) {
-        User user = userRepository.findById(userId).orElseThrow();
-
-        // Create empty list if excludedBranchIds is null
-        if (excludedBranchIds == null) {
-            excludedBranchIds = new ArrayList<>();
-        }
-
-        for (Branch branch : user.getBranches()) {
-            if (!excludedBranchIds.contains(branch.getId())) {
-                branch.getUsers().remove(user);
-                branchRepository.save(branch);
-            }
-        }
-
-        user.getBranches().clear();
-        userRepository.save(user);
+    public void removeUserFromAllBranches(User user) {
+        userBranchRepository.deleteAllByUser(user);
     }
 }

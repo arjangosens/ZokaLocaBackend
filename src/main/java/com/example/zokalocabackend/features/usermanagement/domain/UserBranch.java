@@ -1,29 +1,26 @@
 package com.example.zokalocabackend.features.usermanagement.domain;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Set;
-
-@Setter
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Document
-public class Branch {
-
+@CompoundIndex(name = "user_branch_idx", def = "{'user': 1, 'branch': 1}", unique = true)
+public class UserBranch {
     @Id
-    @Setter(AccessLevel.PRIVATE)
+    @Setter(AccessLevel.NONE)
     private String id;
 
-    @NotBlank
-    private String name;
+    @DBRef
+    private User user;
 
-    public Branch(String name) {
-        this.name = name;
-    }
+    @DBRef
+    private Branch branch;
 }

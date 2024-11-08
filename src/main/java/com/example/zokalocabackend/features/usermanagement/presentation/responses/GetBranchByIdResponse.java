@@ -4,7 +4,7 @@ import com.example.zokalocabackend.features.usermanagement.presentation.datatran
 
 import java.util.List;
 
-public record GetBranchResponse(
+public record GetBranchByIdResponse(
         String id,
         String name,
         List<UserCollectionItemDTO> users
