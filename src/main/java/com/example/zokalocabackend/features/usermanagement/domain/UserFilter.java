@@ -10,6 +10,7 @@ import lombok.*;
 public class UserFilter {
     private String firstName;
     private String lastName;
+    private String fullName;
     private String email;
     private UserRole role;
     private String branchId;

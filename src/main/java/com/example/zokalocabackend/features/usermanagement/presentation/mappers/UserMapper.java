@@ -48,6 +48,7 @@ public class UserMapper {
         return UserFilter.builder()
                 .firstName(request.firstName())
                 .lastName(request.lastName())
+                .fullName(request.fullName())
                 .email(request.email())
                 .role(request.role())
                 .branchId(request.branchId())

@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class FilterableUserRepositoryImpl implements FilterableUserRepository {
@@ -23,9 +24,9 @@ public class FilterableUserRepositoryImpl implements FilterableUserRepository {
     @Override
     public Page<User> findAllWithFilters(Pageable pageable, UserFilter filter) {
         Query query = new Query().with(pageable);
-
         addFirstNameCriteria(query, filter);
         addLastNameCriteria(query, filter);
+        addFullNameCriteria(query, filter);
         addEmailCriteria(query, filter);
         addRoleCriteria(query, filter);
         addBranchesCriteria(query, filter);
@@ -63,6 +64,26 @@ public class FilterableUserRepositoryImpl implements FilterableUserRepository {
     private void addBranchesCriteria(Query query, UserFilter filter) {
         if (filter.getBranchId() != null && !filter.getBranchId().isEmpty()) {
             query.addCriteria(Criteria.where("branches.$id").is(new ObjectId(filter.getBranchId())));
+        }
+    }
+
+    private void addFullNameCriteria(Query query, UserFilter filter) {
+        if (filter.getFullName() != null && !filter.getFullName().isEmpty()) {
+            String[] fullNameParts = filter.getFullName().split(" ");
+
+            if (fullNameParts.length <= 1) {
+                query.addCriteria(new Criteria().orOperator(
+                        Criteria.where("firstName").regex(filter.getFullName(), "i"),
+                        Criteria.where("lastName").regex(filter.getFullName(), "i")
+                ));
+            } else {
+                String lastNamePart = String.join(" ", Arrays.copyOfRange(fullNameParts, 1, fullNameParts.length));
+                query.addCriteria(new Criteria().andOperator(
+                        Criteria.where("firstName").regex(fullNameParts[0], "i"),
+                        Criteria.where("lastName").regex(lastNamePart, "i")
+                ));
+            }
+
         }
     }
 }

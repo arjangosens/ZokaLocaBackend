@@ -9,6 +9,7 @@ public record GetAllUsersRequest(
         String sortOrder,
         String firstName,
         String lastName,
+        String fullName,
         String email,
         UserRole role,
         String branchId
