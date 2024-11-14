@@ -3,6 +3,7 @@ package com.example.zokalocabackend.features.usermanagement.presentation.control
 import com.example.zokalocabackend.features.usermanagement.domain.Branch;
 import com.example.zokalocabackend.features.usermanagement.domain.User;
 import com.example.zokalocabackend.features.usermanagement.domain.UserFilter;
+import com.example.zokalocabackend.features.usermanagement.domain.UserRole;
 import com.example.zokalocabackend.features.usermanagement.presentation.mappers.UserMapper;
 import com.example.zokalocabackend.features.usermanagement.presentation.requests.GetAllUsersRequest;
 import com.example.zokalocabackend.features.usermanagement.presentation.requests.RegisterUserRequest;
@@ -21,6 +22,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
@@ -41,6 +43,7 @@ public class UserController {
         this.passwordEncodingService = passwordEncodingService;
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping
     public ResponseEntity<Page<GetAllUsersListItemResponse>> getAllUsers(GetAllUsersRequest request) {
         Sort sort = Sort.by(Sort.Direction.fromString(request.sortOrder()), request.sortBy());
@@ -53,6 +56,7 @@ public class UserController {
         return ResponseEntity.ok(getUserResponses);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<GetUserByIdResponse> getUserById(@PathVariable @NotBlank String id) {
         User user = userService.getUserById(id);
@@ -60,6 +64,7 @@ public class UserController {
         return ResponseEntity.ok(UserMapper.toGetUserByIdResponse(user, branches));
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
     public ResponseEntity<?> registerUser(@RequestBody @Valid RegisterUserRequest registerUserRequest) {
         String passwordHash = passwordEncodingService.encodePassword(registerUserRequest.password());
@@ -72,6 +77,7 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<?> updateUser(@PathVariable @NotBlank String id, @RequestBody @Valid UpdateUserRequest updateUserRequest) {
         User existingUser = userService.getUserById(id);
@@ -82,6 +88,7 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable @NotBlank String id) {
         User user = userService.getUserById(id);
