@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 /**
  * Service class for managing users.
@@ -38,6 +39,10 @@ public class UserService {
      */
     public User getUserById(String id) {
         return userRepository.findById(id).orElseThrow();
+    }
+
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmailIgnoreCase(email);
     }
 
     /**
