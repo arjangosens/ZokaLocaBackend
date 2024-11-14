@@ -24,7 +24,9 @@ public class ApplicationConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return userRepository::findByEmailIgnoreCase;
+        return id -> {
+            return userRepository.findById(id).orElse(null);
+        };
     }
 
     @Bean

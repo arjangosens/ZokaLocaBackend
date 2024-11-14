@@ -11,12 +11,10 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
-    private final UserRepository userRepository;
     private final JwtService jwtService;
 
-    public String authenticate(String email, String password) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
-        User user = userRepository.findByEmail(email).orElseThrow();
+    public String authenticate(User user, String password) {
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getId(), password));
         return jwtService.generateToken(user);
     }
 }

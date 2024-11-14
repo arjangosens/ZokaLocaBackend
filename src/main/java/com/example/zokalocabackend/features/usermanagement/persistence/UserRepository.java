@@ -8,5 +8,4 @@ import java.util.Optional;
 public interface UserRepository extends MongoRepository<User, String>, FilterableUserRepository {
     boolean existsByEmailIgnoreCase(String email);
     User findByEmailIgnoreCase(String email);
-    Optional<User> findByEmail(String email);
 }
