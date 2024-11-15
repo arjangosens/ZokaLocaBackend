@@ -11,7 +11,6 @@ import com.example.zokalocabackend.features.usermanagement.presentation.response
 import com.example.zokalocabackend.features.usermanagement.presentation.responses.GetBranchByIdResponse;
 import com.example.zokalocabackend.features.usermanagement.services.BranchService;
 import com.example.zokalocabackend.features.usermanagement.services.UserBranchService;
-import com.example.zokalocabackend.features.usermanagement.services.UserService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +19,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/branches")
@@ -57,6 +55,7 @@ public class BranchController {
         return ResponseEntity.ok(BranchMapper.toGetBranchByIdResponse(branch, users));
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
     public ResponseEntity<?> createBranch(@RequestBody @Valid CreateBranchRequest createBranchRequest) {
         Branch branch = BranchMapper.toBranch(createBranchRequest);
@@ -64,6 +63,7 @@ public class BranchController {
         return ResponseEntity.ok().build();
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<?> updateBranch(@PathVariable @NotBlank String id, @RequestBody @Valid UpdateBranchRequest updateBranchRequest) {
         Branch branch = BranchMapper.toBranch(updateBranchRequest, id);
