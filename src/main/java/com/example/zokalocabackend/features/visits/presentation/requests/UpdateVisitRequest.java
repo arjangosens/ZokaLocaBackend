@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Set;
 
-public record ModifyVisitRequest(
+public record UpdateVisitRequest(
         @NotNull
         LocalDate arrivalDate,
 
@@ -17,12 +17,6 @@ public record ModifyVisitRequest(
         @Min(1)
         @Max(10)
         int rating,
-
-        @NotNull
-        String branchId,
-
-        @NotNull
-        String campsiteId,
 
         @Min(1)
         Integer numOfPeople,

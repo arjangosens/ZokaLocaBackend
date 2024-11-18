@@ -1,14 +1,20 @@
 package com.example.zokalocabackend.features.visits.presentation;
 
 import com.example.zokalocabackend.features.campsites.domain.Campsite;
+import com.example.zokalocabackend.features.campsites.presentation.mappers.CampsiteMapper;
 import com.example.zokalocabackend.features.campsites.services.CampsiteService;
 import com.example.zokalocabackend.features.usermanagement.domain.Branch;
 import com.example.zokalocabackend.features.usermanagement.domain.User;
+import com.example.zokalocabackend.features.usermanagement.presentation.mappers.BranchMapper;
 import com.example.zokalocabackend.features.usermanagement.services.BranchService;
 import com.example.zokalocabackend.features.usermanagement.services.UserBranchService;
 import com.example.zokalocabackend.features.visits.Visit;
 import com.example.zokalocabackend.features.visits.VisitService;
-import com.example.zokalocabackend.features.visits.presentation.requests.ModifyVisitRequest;
+import com.example.zokalocabackend.features.visits.presentation.requests.CreateVisitRequest;
+import com.example.zokalocabackend.features.visits.presentation.requests.UpdateVisitRequest;
+import com.example.zokalocabackend.features.visits.presentation.responses.GetVisitWithBranchAndCampsiteResponse;
+import com.example.zokalocabackend.features.visits.presentation.responses.GetVisitWithBranchResponse;
+import com.example.zokalocabackend.features.visits.presentation.responses.GetVisitWithCampsiteResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -29,33 +35,50 @@ public class VisitController {
     private final UserBranchService userBranchService;
 
     @GetMapping("/campsite/{campsiteId}")
-    public ResponseEntity<?> getAllVisitsByCampsiteId(@PathVariable String campsiteId) {
+    public ResponseEntity<List<GetVisitWithBranchResponse>> getAllVisitsByCampsiteId(@PathVariable String campsiteId) {
         if (!campsiteService.existsCampsiteById(campsiteId)) {
             throw new NoSuchElementException("Campsite not found");
         }
 
         List<Visit> visits = visitService.getAllVisitsByCampsiteId(campsiteId);
-        return ResponseEntity.ok(visits);
+        List<GetVisitWithBranchResponse> response = visits.stream()
+                .map(visit -> {
+                    Branch branch = branchService.getBranchById(visit.getBranchId());
+                    return VisitMapper.toGetVisitWithBranchResponse(visit, BranchMapper.toBranchCollectionItemDTO(branch));
+                })
+                .toList();
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/branch/{branchId}")
-    public ResponseEntity<?> getAllVisitsByBranchId(@PathVariable String branchId) {
+    public ResponseEntity<List<GetVisitWithCampsiteResponse>> getAllVisitsByBranchId(@PathVariable String branchId) {
         if (!branchService.existsBranchById(branchId)) {
             throw new NoSuchElementException("Branch not found");
         }
-        List<Visit> visits = visitService.getAllVisitsByBranchId(branchId);
 
-        return ResponseEntity.ok(visits);
+        List<Visit> visits = visitService.getAllVisitsByBranchId(branchId);
+        List<GetVisitWithCampsiteResponse> response = visits.stream()
+                .map(visit -> {
+                    Campsite campsite = campsiteService.getCampsiteById(visit.getCampsiteId());
+                    return VisitMapper.toGetVisitWithCampsiteResponse(visit, CampsiteMapper.toGetCampsiteResponse(campsite));
+                })
+                .toList();
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{visitId}")
-    public ResponseEntity<?> getVisitById(@PathVariable String visitId) {
+    public ResponseEntity<GetVisitWithBranchAndCampsiteResponse> getVisitById(@PathVariable String visitId) {
         Visit visit = visitService.getVisitById(visitId);
-        return ResponseEntity.ok(visit);
+        Branch branch = branchService.getBranchById(visit.getBranchId());
+        Campsite campsite = campsiteService.getCampsiteById(visit.getCampsiteId());
+        GetVisitWithBranchAndCampsiteResponse response = VisitMapper.toGetVisitWithBranchAndCampsiteResponse(visit, BranchMapper.toBranchCollectionItemDTO(branch), CampsiteMapper.toGetCampsiteResponse(campsite));
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping()
-    public ResponseEntity<?> createVisit(@Valid @RequestBody ModifyVisitRequest request, @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<?> createVisit(@Valid @RequestBody CreateVisitRequest request, @AuthenticationPrincipal UserDetails userDetails) {
         User loggedInUser = (User) userDetails;
 
         if (!campsiteService.existsCampsiteById(request.campsiteId())) {
@@ -72,7 +95,10 @@ public class VisitController {
     }
 
     @PutMapping("/{visitId}")
-    public ResponseEntity<?> updateVisit(@PathVariable String visitId) {
+    public ResponseEntity<?> updateVisit(@PathVariable String visitId, @Valid @RequestBody UpdateVisitRequest request) {
+        Visit existingVisit = visitService.getVisitById(visitId);
+        Visit newVisit = VisitMapper.toVisit(existingVisit.getId(), request, existingVisit.getBranchId(), existingVisit.getCampsiteId());
+        visitService.updateVisit(visitId, newVisit);
         return ResponseEntity.ok().build();
     }
 }
