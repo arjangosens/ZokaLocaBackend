@@ -30,6 +30,17 @@ public class UserBranchService {
     }
 
     /**
+     * Checks if a UserBranch relationship exists by user ID and branch ID.
+     *
+     * @param userId the ID of the user
+     * @param branchId the ID of the branch
+     * @return true if the relationship exists, false otherwise
+     */
+    public boolean existsUserBranchByUserIdAndBranchId(String userId, String branchId) {
+        return userBranchRepository.existsByUserIdAndBranchId(userId, branchId);
+    }
+
+    /**
      * Retrieves all branches associated with a given user ID.
      *
      * @param userId the ID of the user whose branches are to be retrieved
