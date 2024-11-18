@@ -37,12 +37,10 @@ public class Visit {
     private int rating;
 
     @NotNull
-    @DBRef(lazy = true)
-    private Branch branch;
+    private String branchId;
 
     @NotNull
-    @DBRef(lazy = true)
-    private Campsite campsite;
+    private String campsiteId;
 
     @Min(1)
     private Integer numOfPeople;

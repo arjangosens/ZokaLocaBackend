@@ -57,14 +57,16 @@ public class VisitController {
     @PostMapping()
     public ResponseEntity<?> createVisit(@Valid @RequestBody ModifyVisitRequest request, @AuthenticationPrincipal UserDetails userDetails) {
         User loggedInUser = (User) userDetails;
-        Campsite campsite = campsiteService.getCampsiteById(request.campsiteId());
-        Branch branch = branchService.getBranchById(request.branchId());
 
-        if (!userBranchService.existsUserBranchByUserIdAndBranchId(loggedInUser.getId(), branch.getId())) {
+        if (!campsiteService.existsCampsiteById(request.campsiteId())) {
+            throw new NoSuchElementException("Campsite not found");
+        } else if (!branchService.existsBranchById(request.branchId())) {
+            throw new NoSuchElementException("Branch not found");
+        } else if (!userBranchService.existsUserBranchByUserIdAndBranchId(loggedInUser.getId(), request.branchId())) {
             throw new IllegalArgumentException("User is not associated with the branch");
         }
 
-        Visit visit = VisitMapper.toVisit(null, request, branch, campsite);
+        Visit visit = VisitMapper.toVisit(null, request);
         visitService.createVisit(visit);
         return ResponseEntity.ok().build();
     }

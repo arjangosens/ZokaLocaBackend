@@ -25,7 +25,7 @@ public class VisitService {
      * @return a list of visits for the specified campsite
      */
     public List<Visit> getAllVisitsByCampsiteId(String campsiteId) {
-        return visitRepository.findAllByCampsite_Id(campsiteId);
+        return visitRepository.findAllByCampsiteId(campsiteId);
     }
 
     /**
@@ -35,7 +35,7 @@ public class VisitService {
      * @return a list of visits for the specified branch
      */
     public List<Visit> getAllVisitsByBranchId(String branchId) {
-        return visitRepository.findAllByBranch_Id(branchId);
+        return visitRepository.findAllByBranchId(branchId);
     }
 
     /**
@@ -73,8 +73,8 @@ public class VisitService {
         existingVisit.setArrivalDate(visit.getArrivalDate());
         existingVisit.setDepartureDate(visit.getDepartureDate());
         existingVisit.setRating(visit.getRating());
-        existingVisit.setBranch(visit.getBranch());
-        existingVisit.setCampsite(visit.getCampsite());
+        existingVisit.setBranchId(visit.getBranchId());
+        existingVisit.setCampsiteId(visit.getCampsiteId());
         existingVisit.setNumOfPeople(visit.getNumOfPeople());
         existingVisit.setPrice(visit.getPrice());
         existingVisit.setDescription(visit.getDescription());
