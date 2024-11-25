@@ -1,5 +1,6 @@
 package com.example.zokalocabackend.features.usermanagement.services;
 
+import com.example.zokalocabackend.BaseTest;
 import com.example.zokalocabackend.exceptions.DuplicateResourceException;
 import com.example.zokalocabackend.features.usermanagement.domain.User;
 import com.example.zokalocabackend.features.usermanagement.domain.UserFilter;
@@ -24,8 +25,7 @@ import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@SpringBootTest
-public class UserServiceTests {
+public class UserServiceTests extends BaseTest {
     @MockBean
     private UserRepository userRepository;
 

@@ -8,9 +8,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 @RequiredArgsConstructor
 @Configuration
+@Profile("!test")
 public class DataSeeder {
     private final PasswordEncodingService passwordEncodingService;
 

@@ -1,5 +1,6 @@
 package com.example.zokalocabackend.features.campsites.services;
 
+import com.example.zokalocabackend.BaseTest;
 import com.example.zokalocabackend.features.usermanagement.domain.Branch;
 import com.example.zokalocabackend.features.usermanagement.domain.User;
 import com.example.zokalocabackend.features.usermanagement.domain.UserBranch;
@@ -24,8 +25,7 @@ import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@SpringBootTest
-public class UserBranchServiceTests {
+public class UserBranchServiceTests extends BaseTest {
 
     @MockBean
     private UserBranchRepository userBranchRepository;
