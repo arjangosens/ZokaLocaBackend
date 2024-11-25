@@ -28,6 +28,11 @@ public class VisitService {
         return visitRepository.findAllByCampsiteId(campsiteId);
     }
 
+    public double getAverageRatingByCampsiteId(String campsiteId) {
+        List<Visit> visits = visitRepository.findAllByCampsiteId(campsiteId);
+        return visits.stream().mapToInt(Visit::getRating).average().orElse(0);
+    }
+
     /**
      * Retrieves all visits by branch ID.
      *

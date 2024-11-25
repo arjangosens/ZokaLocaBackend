@@ -18,7 +18,7 @@ public class GetBuildingResponse extends GetCampsiteResponse{
     private final int numOfCommonAreas;
 
     public GetBuildingResponse(String id, String name, String description, AddressDTO address, PersonLimitDTO personLimit, CampsitePriceDTO price, String arrivalTime, String departureTime, int numOfToilets, int numOfShowers, int numOfWaterSources, HashMap<String, SurroundingProximity> surroundings, HashMap<String, String> externalSources, List<FacilityDTO> facilities, String campGroundId, int numOfRooms, int numOfCommonAreas) {
-        super(id, name, "BUILDING", description, address, personLimit, price, arrivalTime, departureTime, numOfToilets, numOfShowers, numOfWaterSources, surroundings, externalSources, facilities, campGroundId);
+        super(id, name, "BUILDING", description, address, personLimit, price, arrivalTime, departureTime, numOfToilets, numOfShowers, numOfWaterSources, surroundings, externalSources, facilities, campGroundId, 0);
         this.numOfRooms = numOfRooms;
         this.numOfCommonAreas = numOfCommonAreas;
     }

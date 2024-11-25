@@ -61,7 +61,8 @@ public class VisitController {
         List<GetVisitWithCampsiteResponse> response = visits.stream()
                 .map(visit -> {
                     Campsite campsite = campsiteService.getCampsiteById(visit.getCampsiteId());
-                    return VisitMapper.toGetVisitWithCampsiteResponse(visit, CampsiteMapper.toGetCampsiteResponse(campsite));
+                    double rating = visitService.getAverageRatingByCampsiteId(visit.getCampsiteId());
+                    return VisitMapper.toGetVisitWithCampsiteResponse(visit, CampsiteMapper.toGetCampsiteResponse(campsite, rating));
                 })
                 .toList();
 
@@ -73,7 +74,8 @@ public class VisitController {
         Visit visit = visitService.getVisitById(visitId);
         Branch branch = branchService.getBranchById(visit.getBranchId());
         Campsite campsite = campsiteService.getCampsiteById(visit.getCampsiteId());
-        GetVisitWithBranchAndCampsiteResponse response = VisitMapper.toGetVisitWithBranchAndCampsiteResponse(visit, BranchMapper.toBranchCollectionItemDTO(branch), CampsiteMapper.toGetCampsiteResponse(campsite));
+        double rating = visitService.getAverageRatingByCampsiteId(visit.getCampsiteId());
+        GetVisitWithBranchAndCampsiteResponse response = VisitMapper.toGetVisitWithBranchAndCampsiteResponse(visit, BranchMapper.toBranchCollectionItemDTO(branch), CampsiteMapper.toGetCampsiteResponse(campsite, rating));
         return ResponseEntity.ok(response);
     }
 

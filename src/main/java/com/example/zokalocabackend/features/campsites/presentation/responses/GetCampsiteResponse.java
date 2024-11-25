@@ -39,4 +39,5 @@ public abstract class GetCampsiteResponse {
     private final HashMap<String, String> externalSources;
     private final List<FacilityDTO> facilities;
     private final String campGroundId;
+    private double rating;
 }
