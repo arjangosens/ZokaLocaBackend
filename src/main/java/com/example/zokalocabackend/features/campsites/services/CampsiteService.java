@@ -24,6 +24,10 @@ public class CampsiteService {
         this.validator = validator;
     }
 
+    public boolean existsCampsiteById(String id) {
+        return campsiteRepository.existsById(id);
+    }
+
     public Page<Campsite> getAllCampsites(Pageable pageable, CampsiteFilter filter) {
         return campsiteRepository.findAllWithFilters(pageable, filter);
     }

@@ -9,8 +9,9 @@ import com.example.zokalocabackend.features.campsites.presentation.mappers.Camps
 import com.example.zokalocabackend.features.campsites.presentation.requests.GetAllCampsitesRequest;
 import com.example.zokalocabackend.features.campsites.presentation.requests.ModifyCampsiteRequest;
 import com.example.zokalocabackend.features.campsites.presentation.responses.GetCampsiteResponse;
+import com.example.zokalocabackend.features.visits.VisitService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,17 +22,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashSet;
 import java.util.Set;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/campsites")
 public class CampsiteController {
     private final CampsiteService campsiteService;
     private final FacilityService facilityService;
-
-    @Autowired
-    public CampsiteController(CampsiteService campsiteService, FacilityService facilityService) {
-        this.campsiteService = campsiteService;
-        this.facilityService = facilityService;
-    }
+    private final VisitService visitService;
 
     @GetMapping
     public ResponseEntity<Page<GetCampsiteResponse>> getAllCampsites(GetAllCampsitesRequest request) {
@@ -39,8 +36,13 @@ public class CampsiteController {
         Pageable pageable = PageRequest.of(request.page(), request.pageSize(), sort);
         CampsiteFilter filter = CampsiteMapper.toCampsiteFilter(request);
 
+
+
         Page<Campsite> campsites = campsiteService.getAllCampsites(pageable, filter);
-        Page<GetCampsiteResponse> getCampsiteResponses = campsites.map(CampsiteMapper::toGetCampsiteResponse);
+        Page<GetCampsiteResponse> getCampsiteResponses = campsites.map(campsite -> {
+            double rating = visitService.getAverageRatingByCampsiteId(campsite.getId());
+            return CampsiteMapper.toGetCampsiteResponse(campsite, rating);
+        });
 
         return ResponseEntity.ok(getCampsiteResponses);
     }
@@ -48,7 +50,7 @@ public class CampsiteController {
     @GetMapping("/{id}")
     public ResponseEntity<GetCampsiteResponse> getCampsite(@PathVariable String id) {
         Campsite campsite = campsiteService.getCampsiteById(id);
-        return ResponseEntity.ok(CampsiteMapper.toGetCampsiteResponse(campsite));
+        return ResponseEntity.ok(CampsiteMapper.toGetCampsiteResponse(campsite, visitService.getAverageRatingByCampsiteId(id)));
     }
 
     @PostMapping

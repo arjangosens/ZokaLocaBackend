@@ -31,6 +31,16 @@ public class BranchService {
     }
 
     /**
+     * Checks if a branch with the specified ID exists.
+     *
+     * @param id the ID of the branch to check
+     * @return true if a branch with the specified ID exists, false otherwise
+     */
+    public boolean existsBranchById(String id) {
+        return branchRepository.existsById(id);
+    }
+
+    /**
      * Retrieves a branch by its ID.
      *
      * @param id the ID of the branch to retrieve
