@@ -3,10 +3,7 @@ package com.example.zokalocabackend.features.campsites.domain;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.TypeAlias;
@@ -14,6 +11,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 
 @Setter
@@ -65,6 +63,12 @@ public abstract class Campsite {
     @DBRef
     private String campGroundId;
 
+    private String thumbnailAssetId;
+
+    @Builder.Default
+    private Set<String> imageIds = new HashSet<>();
+
     public Campsite() {
+        this.imageIds = new HashSet<>();
     }
 }
