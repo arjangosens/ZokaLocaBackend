@@ -6,7 +6,7 @@ services:
     ports:
       - "8080:8080"
     environment:
-      SPRING_DATA_MONGODB_URI: mongodb://admin:password@mongo:27017
+      SPRING_DATA_MONGODB_URI: mongodb://admin:password@mongo:27018
       SPRING_DATA_MONGODB_DATABASE: zokaloca
       SPRING_ASSET_STORAGE_URL: http://asset_storage:9000
       SPRING_ASSET_STORAGE_ACCESS_KEY: minioadmin
@@ -29,10 +29,11 @@ services:
   mongo:
     image: mongo:latest
     ports:
-      - "27017:27017"
+      - "27018:27018"
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: password
+    command: mongod --port 27018
     volumes:
       - mongodb_data:/data/db
       - mongodb_config:/data/configdb
@@ -43,7 +44,7 @@ services:
       - "8081:8081"
     environment:
       ME_CONFIG_MONGODB_SERVER: mongo
-      ME_CONFIG_MONGODB_PORT: 27017
+      ME_CONFIG_MONGODB_PORT: 27018
       ME_CONFIG_BASICAUTH_USERNAME: admin
       ME_CONFIG_BASICAUTH_PASSWORD: password
       ME_CONFIG_MONGODB_ADMINUSERNAME: admin

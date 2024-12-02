@@ -16,7 +16,7 @@ public class CorsConfig {
                 // Development configuration
                 registry.addMapping("/**")
                         .allowedOrigins("http://localhost:5173")
-                        .allowedMethods("GET", "POST", "PUT", "DELETE")
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH")
                         .allowedHeaders("*")
                         .allowCredentials(true); // Enable sending of credentials
                 //TODO: Add configuration for production

@@ -68,6 +68,8 @@ public class CampsiteService {
         campsiteToUpdate.setExternalSources(campsite.getExternalSources());
         campsiteToUpdate.setFacilities(campsite.getFacilities());
         campsiteToUpdate.setCampGroundId(campsite.getCampGroundId());
+        campsiteToUpdate.setThumbnailAssetId(campsite.getThumbnailAssetId());
+        campsiteToUpdate.setImageIds(campsite.getImageIds());
 
         if (campsite instanceof Field) {
             ((Field) campsiteToUpdate).setSizeSquareMeters(((Field) campsite).getSizeSquareMeters());

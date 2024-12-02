@@ -81,6 +81,8 @@ public class CampsiteMapper {
                     .numOfRooms(building.getNumOfRooms())
                     .numOfCommonAreas(building.getNumOfCommonAreas())
                     .rating(rating)
+                    .thumbnailId(campsite.getThumbnailAssetId())
+                    .imageIds(campsite.getImageIds().stream().toList())
                     .build();
         } else if (campsite instanceof Field field) {
             return GetFieldResponse.builder()
@@ -102,6 +104,8 @@ public class CampsiteMapper {
                     .campGroundId(campsite.getCampGroundId())
                     .sizeSquareMeters(field.getSizeSquareMeters())
                     .rating(rating)
+                    .thumbnailId(campsite.getThumbnailAssetId())
+                    .imageIds(campsite.getImageIds().stream().toList())
                     .build();
         } else {
             throw new IllegalArgumentException("Unknown campsite type");
