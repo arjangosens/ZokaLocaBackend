@@ -20,18 +20,36 @@ public class AssetService {
     private final AssetRepository assetRepository;
 
     public Asset createAsset(Asset asset, InputStream inputStream) throws MinioException, IOException, NoSuchAlgorithmException, InvalidKeyException {
+        asset = assetRepository.save(asset);
         String bucketName = asset.getLocation().toString();
         minioRepository.ensureBucketExists(bucketName);
-        minioRepository.uploadFile(bucketName, asset.getName(), inputStream, asset.getContentType());
-        return assetRepository.save(asset);
+        minioRepository.uploadFile(bucketName, asset.getId(), inputStream, asset.getContentType());
+        return asset;
     }
 
     public InputStream downloadAssetData(Asset asset) throws MinioException, IOException, NoSuchAlgorithmException, InvalidKeyException {
         String bucketName = asset.getLocation().toString();
-        return minioRepository.downloadFile(bucketName, asset.getName());
+        return minioRepository.downloadFile(bucketName, asset.getId());
     }
 
     public Asset getAssetById(String assetId) {
         return assetRepository.findById(assetId).orElseThrow();
+    }
+
+    public void updateAssetInfo(String assetId, Asset asset) {
+        assetRepository.save(asset);
+    }
+
+    public void updateAssetContent(String assetId, InputStream inputStream) throws MinioException, IOException, NoSuchAlgorithmException, InvalidKeyException {
+        Asset asset = getAssetById(assetId);
+        String bucketName = asset.getLocation().toString();
+        minioRepository.uploadFile(bucketName, assetId, inputStream, asset.getContentType());
+    }
+
+    public void deleteAsset(String assetId) throws MinioException, IOException, NoSuchAlgorithmException, InvalidKeyException {
+        Asset asset = getAssetById(assetId);
+        String bucketName = asset.getLocation().toString();
+        minioRepository.deleteFile(bucketName, assetId);
+        assetRepository.deleteById(assetId);
     }
 }
