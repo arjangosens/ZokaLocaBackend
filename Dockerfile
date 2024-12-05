@@ -14,14 +14,11 @@ RUN chmod +x gradlew
 # Copy the rest of the application code
 COPY src /app/src
 
-# Build the application
-RUN ./gradlew build -x test
-
-# Copy the built JAR file to the working directory using a wildcard
-COPY build/libs/*.jar /app/ZokaLocaBackend.jar
+# Build the application and move it to the /app directory
+RUN ./gradlew bootJar && mv build/libs/*.jar /app/zokalocabackend.jar
 
 # Expose the port the application runs on
 EXPOSE 8080
 
 # Set the entry point to run the application
-ENTRYPOINT ["java", "-jar", "/app/ZokaLocaBackend.jar"]
+ENTRYPOINT ["java", "-jar", "/app/zokalocabackend.jar"]
