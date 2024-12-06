@@ -1,0 +1,82 @@
+services:
+  backend-api:
+    hostname: backend-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATA_MONGODB_URI: mongodb://admin:password@mongo:27018
+      SPRING_DATA_MONGODB_DATABASE: zokaloca
+      SPRING_ASSET_STORAGE_URL: http://asset-storage:9000
+      SPRING_ASSET_STORAGE_ACCESS_KEY: minioadmin
+      SPRING_ASSET_STORAGE_SECRET_KEY: minioadmin
+    depends_on:
+      - asset-storage
+      - mongo
+    networks:
+      - public
+      - private
+
+  frontend:
+    image: zokaloca-frontend:latest
+    ports:
+      - "80:80"
+    networks:
+      - public
+
+  asset-storage:
+    hostname: asset-storage
+    image: minio/minio
+    command: server /data
+    ports:
+      - "9000:9000"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    volumes:
+      - asset_storage_data:/data
+    networks:
+      - private
+
+  mongo:
+    hostname: mongo
+    image: mongo:latest
+    ports:
+      - "27018:27018"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+    command: mongod --port 27018
+    volumes:
+      - mongodb_data:/data/db
+      - mongodb_config:/data/configdb
+    networks:
+      - private
+
+  mongo-express:
+    hostname: mongo-express
+    image: mongo-express:latest
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongo
+      ME_CONFIG_MONGODB_PORT: 27018
+      ME_CONFIG_BASICAUTH_USERNAME: admin
+      ME_CONFIG_BASICAUTH_PASSWORD: password
+      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: password
+    depends_on:
+      - mongo
+    networks:
+      - private
+
+volumes:
+  asset_storage_data:
+  mongodb_data:
+  mongodb_config:
+
+networks:
+  public:
+  private:

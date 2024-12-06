@@ -1,5 +1,6 @@
 package com.example.zokalocabackend.features.campsites.services;
 
+import com.example.zokalocabackend.BaseTest;
 import com.example.zokalocabackend.features.campsites.services.CampgroundService;
 import com.example.zokalocabackend.features.campsites.domain.Campground;
 import com.example.zokalocabackend.features.campsites.persistence.CampgroundRepository;
@@ -20,8 +21,7 @@ import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@SpringBootTest
-public class CampgroundServiceTests {
+public class CampgroundServiceTests extends BaseTest {
 
     @MockBean
     private CampgroundRepository campgroundRepository;

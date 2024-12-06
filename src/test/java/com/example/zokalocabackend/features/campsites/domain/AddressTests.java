@@ -1,5 +1,6 @@
 package com.example.zokalocabackend.features.campsites.domain;
 
+import com.example.zokalocabackend.BaseTest;
 import com.example.zokalocabackend.features.campsites.domain.Address;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -7,8 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@SpringBootTest
-public class AddressTests {
+public class AddressTests extends BaseTest {
 
     @Test
     public void constructor_withInvalidCountryCode_throwsException() {
