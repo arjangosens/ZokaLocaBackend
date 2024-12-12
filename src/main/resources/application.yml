@@ -2,7 +2,7 @@ spring:
   application:
     name: ZokaLocaBackend
   profiles:
-    active: e2e
+    active: default
 
   asset.storage:
     url: http://localhost:9000
