@@ -1,6 +1,8 @@
 spring:
   application:
     name: ZokaLocaBackend
+  profiles:
+    active: default
 
   asset.storage:
     url: http://localhost:9000
@@ -9,7 +11,7 @@ spring:
 
   data:
     mongodb:
-      uri: mongodb://admin:password@localhost:27018
+      uri: mongodb://localhost:27017
       database: zokaloca
 
 server:
@@ -20,3 +22,8 @@ application:
     jwt:
       secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
       expiration: 86400000 # a day
+  root-user:
+    email: a.gosens@student.fontys.nl
+    first-name: Arjan
+    last-name: Gosens
+    password: Qwerty123!
