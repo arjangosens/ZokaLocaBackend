@@ -1,8 +1,10 @@
 package com.example.zokalocabackend.features.chat.domain;
 
+import com.example.zokalocabackend.features.usermanagement.domain.User;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.time.Instant;
 
@@ -21,15 +23,16 @@ public class Message {
     @NotBlank
     private String conversationId;
 
-    private String authorId;
+    @DBRef
+    private User author;
 
     private Instant timestamp;
 
-    public Message(String id, String content, String conversationId, String authorId) {
+    public Message(String id, String content, String conversationId, User author) {
         this.id = id;
         this.content = content;
         this.conversationId = conversationId;
-        this.authorId = authorId;
+        this.author = author;
         this.timestamp = Instant.now();
     }
 }
