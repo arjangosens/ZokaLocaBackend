@@ -40,7 +40,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build with Gradle
-        run: ./gradlew build -x test -x pmdMain
+        run: ./gradlew build -x test -x pmdMain -x pmdTest
 
     outputs:
       gradle-cache-key: ${{ steps.cache-gradle.outputs.key }}
