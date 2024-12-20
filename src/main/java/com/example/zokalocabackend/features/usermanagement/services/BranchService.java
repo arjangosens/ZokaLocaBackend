@@ -52,6 +52,16 @@ public class BranchService {
     }
 
     /**
+     * Retrieves multiple branches by their IDs.
+     *
+     * @param ids the IDs of the branches to retrieve
+     * @return a list of branches with the specified IDs
+     */
+    public List<Branch> getBranchesWithIds(List<String> ids) {
+        return branchRepository.findAllById(ids);
+    }
+
+    /**
      * Retrieves all branches.
      *
      * @param pageable the pagination information
