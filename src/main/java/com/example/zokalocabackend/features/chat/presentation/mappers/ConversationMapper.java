@@ -8,10 +8,12 @@ import com.example.zokalocabackend.features.chat.presentation.datatransferobject
 import com.example.zokalocabackend.features.chat.presentation.requests.CreateConversationRequest;
 import com.example.zokalocabackend.features.chat.presentation.responses.GetConversationByIdResponse;
 import com.example.zokalocabackend.features.usermanagement.domain.Branch;
+import lombok.experimental.UtilityClass;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@UtilityClass
 public class ConversationMapper {
     public static Conversation toDomain(CreateConversationRequest request) {
         return new Conversation(

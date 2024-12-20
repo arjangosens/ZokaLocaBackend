@@ -20,11 +20,11 @@ public class AssetService {
     private final AssetRepository assetRepository;
 
     public Asset createAsset(Asset asset, InputStream inputStream) throws MinioException, IOException, NoSuchAlgorithmException, InvalidKeyException {
-        asset = assetRepository.save(asset);
-        String bucketName = asset.getLocation().toString();
+        Asset savedAsset = assetRepository.save(asset);
+        String bucketName = savedAsset.getLocation().toString();
         minioRepository.ensureBucketExists(bucketName);
-        minioRepository.uploadFile(bucketName, asset.getId(), inputStream, asset.getContentType());
-        return asset;
+        minioRepository.uploadFile(bucketName, savedAsset.getId(), inputStream, savedAsset.getContentType());
+        return savedAsset;
     }
 
     public InputStream downloadAssetData(Asset asset) throws MinioException, IOException, NoSuchAlgorithmException, InvalidKeyException {

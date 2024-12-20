@@ -9,10 +9,12 @@ import com.example.zokalocabackend.features.usermanagement.presentation.requests
 import com.example.zokalocabackend.features.usermanagement.presentation.requests.UpdateUserRequest;
 import com.example.zokalocabackend.features.usermanagement.presentation.responses.GetAllUsersListItemResponse;
 import com.example.zokalocabackend.features.usermanagement.presentation.responses.GetUserByIdResponse;
+import lombok.experimental.UtilityClass;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@UtilityClass
 public class UserMapper {
     public static GetUserByIdResponse toGetUserByIdResponse(User user, List<Branch> branches) {
         return new GetUserByIdResponse(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getRole(), BranchMapper.toBranchCollectionItemDTOList(branches));

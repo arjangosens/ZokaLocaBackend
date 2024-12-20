@@ -2,6 +2,7 @@ package com.example.zokalocabackend.features.assetmanagement.persistence;
 
 import io.minio.*;
 import io.minio.errors.MinioException;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -10,6 +11,7 @@ import java.io.InputStream;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
+@NoArgsConstructor
 @Repository
 public class MinioRepository {
 

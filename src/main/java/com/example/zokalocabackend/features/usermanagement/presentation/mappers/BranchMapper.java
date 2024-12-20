@@ -9,10 +9,12 @@ import com.example.zokalocabackend.features.usermanagement.presentation.requests
 import com.example.zokalocabackend.features.usermanagement.presentation.requests.UpdateBranchRequest;
 import com.example.zokalocabackend.features.usermanagement.presentation.responses.GetAllBranchesListItemResponse;
 import com.example.zokalocabackend.features.usermanagement.presentation.responses.GetBranchByIdResponse;
+import lombok.experimental.UtilityClass;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@UtilityClass
 public class BranchMapper {
     public static BranchCollectionItemDTO toBranchCollectionItemDTO(Branch branch) {
         return new BranchCollectionItemDTO(branch.getId(), branch.getName());

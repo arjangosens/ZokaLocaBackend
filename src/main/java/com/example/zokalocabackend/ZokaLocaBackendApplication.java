@@ -9,5 +9,4 @@ public class ZokaLocaBackendApplication {
     public static void main(String[] args) {
         SpringApplication.run(ZokaLocaBackendApplication.class, args);
     }
-
 }
