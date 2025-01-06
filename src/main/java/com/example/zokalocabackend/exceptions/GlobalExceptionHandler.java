@@ -1,6 +1,7 @@
 package com.example.zokalocabackend.exceptions;
 
 import jakarta.validation.ConstraintViolationException;
+import lombok.NoArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -18,32 +19,41 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
+@NoArgsConstructor
 @ControllerAdvice
 public class GlobalExceptionHandler {
-    private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<ErrorResponse> handleNoSuchElementException(NoSuchElementException ex) {
-        logger.error("NoSuchElementException: {}", ex.getMessage(), ex);
+        if (LOGGER.isErrorEnabled()) {
+            LOGGER.error("NoSuchElementException: {}", ex.getMessage(), ex);
+        }
         String message = ex.getMessage().equals("No value present") ? "Resource not found" : ex.getMessage();
         return generateErrorResponseEntity(HttpStatus.NOT_FOUND, message);
     }
 
     @ExceptionHandler(DuplicateResourceException.class)
     public ResponseEntity<ErrorResponse> handleDuplicateResourceException(DuplicateResourceException ex) {
-        logger.error("DuplicateResourceException: {}", ex.getMessage(), ex);
+        if (LOGGER.isErrorEnabled()) {
+            LOGGER.error("DuplicateResourceException: {}", ex.getMessage(), ex);
+        }
         return generateErrorResponseEntityFromException(HttpStatus.CONFLICT, ex, "Resource already exists");
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorResponse> handleIllegalArgumentException(IllegalArgumentException ex) {
-        logger.error("IllegalArgumentException: {}", ex.getMessage(), ex);
+        if (LOGGER.isErrorEnabled()) {
+            LOGGER.error("IllegalArgumentException: {}", ex.getMessage(), ex);
+        }
         return generateErrorResponseEntityFromException(HttpStatus.BAD_REQUEST, ex, "Invalid argument");
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
-        logger.error("MethodArgumentNotValidException: {}", ex.getMessage(), ex);
+        if (LOGGER.isErrorEnabled()) {
+            LOGGER.error("MethodArgumentNotValidException: {}", ex.getMessage(), ex);
+        }
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getAllErrors().forEach((error) -> {
             String fieldName = ((FieldError) error).getField();
@@ -58,7 +68,9 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ErrorResponse> handleConstraintViolationException(ConstraintViolationException ex) {
-        logger.error("ConstraintViolationException: {}", ex.getMessage(), ex);
+        if (LOGGER.isErrorEnabled()) {
+            LOGGER.error("ConstraintViolationException: {}", ex.getMessage(), ex);
+        }
         return generateErrorResponseEntity(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 

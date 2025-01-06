@@ -11,9 +11,11 @@ import com.example.zokalocabackend.features.campsites.presentation.requests.Modi
 import com.example.zokalocabackend.features.campsites.presentation.responses.GetBuildingResponse;
 import com.example.zokalocabackend.features.campsites.presentation.responses.GetCampsiteResponse;
 import com.example.zokalocabackend.features.campsites.presentation.responses.GetFieldResponse;
+import lombok.experimental.UtilityClass;
 
 import java.util.Set;
 
+@UtilityClass
 public class CampsiteMapper {
 
     public static Campsite toCampsite(ModifyCampsiteRequest request, Set<Facility> facilities) {

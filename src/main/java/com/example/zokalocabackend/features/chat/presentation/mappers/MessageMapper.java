@@ -5,7 +5,9 @@ import com.example.zokalocabackend.features.chat.presentation.datatransferobject
 import com.example.zokalocabackend.features.chat.presentation.requests.SendMessageRequest;
 import com.example.zokalocabackend.features.chat.presentation.datatransferobjects.MessageDTO;
 import com.example.zokalocabackend.features.usermanagement.domain.User;
+import lombok.experimental.UtilityClass;
 
+@UtilityClass
 public class MessageMapper {
     public static Message toDomain(SendMessageRequest request, String conversationId, User author) {
         return new Message(

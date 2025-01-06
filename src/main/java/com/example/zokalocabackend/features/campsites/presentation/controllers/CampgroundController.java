@@ -23,25 +23,25 @@ public class CampgroundController {
     }
 
     @GetMapping
-    public ResponseEntity<List<GetCampgroundResponse>> GetAllCampgrounds() {
+    public ResponseEntity<List<GetCampgroundResponse>> getAllCampgrounds() {
         List<Campground> campgrounds = campgroundService.getAllCampgrounds();
         return ResponseEntity.ok(CampgroundMapper.toGetCampgroundResponsesList(campgrounds));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<GetCampgroundResponse> GetCampground(@PathVariable String id) {
+    public ResponseEntity<GetCampgroundResponse> getCampground(@PathVariable String id) {
         Campground campground = campgroundService.getCampgroundById(id);
         return ResponseEntity.ok(CampgroundMapper.toGetCampgroundResponse(campground));
     }
 
     @PostMapping
-    public ResponseEntity<?> CreateCampground(@Valid @RequestBody ModifyCampgroundRequest request) {
+    public ResponseEntity<?> createCampground(@Valid @RequestBody ModifyCampgroundRequest request) {
         campgroundService.createCampground(request.name());
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> UpdateCampground(@PathVariable String id, @Valid @RequestBody ModifyCampgroundRequest request) {
+    public ResponseEntity<?> updateCampground(@PathVariable String id, @Valid @RequestBody ModifyCampgroundRequest request) {
         campgroundService.updateCampground(id, request.name());
         return ResponseEntity.ok().build();
     }
