@@ -8,7 +8,9 @@ import com.example.zokalocabackend.features.visits.presentation.requests.UpdateV
 import com.example.zokalocabackend.features.visits.presentation.responses.GetVisitWithBranchAndCampsiteResponse;
 import com.example.zokalocabackend.features.visits.presentation.responses.GetVisitWithBranchResponse;
 import com.example.zokalocabackend.features.visits.presentation.responses.GetVisitWithCampsiteResponse;
+import lombok.experimental.UtilityClass;
 
+@UtilityClass
 public class VisitMapper {
     public static Visit toVisit(String id, CreateVisitRequest request) {
         return Visit.builder()

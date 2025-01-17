@@ -40,7 +40,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build with Gradle
-        run: ./gradlew build -x test
+        run: ./gradlew build -x test -x pmdMain -x pmdTest
 
     outputs:
       gradle-cache-key: ${{ steps.cache-gradle.outputs.key }}
@@ -73,12 +73,22 @@ jobs:
       - name: Run tests
         run: ./gradlew test
 
+      - name: Run PMD analysis
+        run: ./gradlew pmdMain
+
       - name: Upload test report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: test-report
           path: build/reports/tests/test
+
+      - name: Upload PMD report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pmd-report
+          path: build/reports/pmd
 
   deploy:
     runs-on: ubuntu-latest

@@ -1,10 +1,12 @@
 package com.example.zokalocabackend.config;
 
+import lombok.NoArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+@NoArgsConstructor
 @Configuration
 public class CorsConfig {
 
